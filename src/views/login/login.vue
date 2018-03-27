@@ -95,7 +95,7 @@ export default {
                         Cookies.set('access', 1);
                     }
                     this.$router.push({
-                        name: 'register'
+                        name: 'signup'
                     });
                 }
             });
@@ -103,7 +103,3 @@ export default {
     }
 };
 </script>
-
-<style>
-
-</style>

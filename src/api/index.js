@@ -1,11 +1,8 @@
 import axios from 'axios';
-import {
-    config,
-    url
-} from './config.js';
+import { CONFIG, URI } from './config.js';
 import Cookie from 'js-cookie';
 
-const http = axios.create(config);
+const http = axios.create(CONFIG);
 
 http.interceptors.request.use(
     config => {
@@ -37,11 +34,8 @@ http.interceptors.response.use(
 
 const api = {
     login ({ phone, password }) {
-        const data = {
-            phone,
-            password
-        };
-        return http.post(url.POST_LOGIN, data) // 默认发送 json
+        const data = { phone, password };
+        return http.post(URI.LOGIN, data) // 默认发送 json
             .then(res => {
                 const data = res.data.data;
                 if (data && data.token) {
@@ -59,10 +53,10 @@ const api = {
                 return Promise.reject(err);
             });
     },
-    getInfo () {
-        return http.get(url.GET_USER_INFO)
+    getUserInfo () {
+        return http.get(URI.USERINFO)
             .then(res => {
-                // const data=res.data.data
+                const data = res.data.data;
                 if (data) {
                     return data;
                 } else {
@@ -70,7 +64,7 @@ const api = {
                 }
             })
             .catch(err => {
-                console.log('err getInfo', err.massage);
+                console.log('err getUserInfo', err.message);
                 return Promise.reject(err);
             });
     }
