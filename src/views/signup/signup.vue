@@ -1,5 +1,5 @@
 <style lang="less">
-  @import './register.less';
+  @import './signup.less';
 </style>
 <!-- <style scoped>
   .reg {
@@ -69,82 +69,82 @@
   </div>
 </div>
 </template>
-<script>
-  export default {
-    data() {
-      return {
-        formValidate: {
-          name: '',
-          address: '',
-          elder: '',
-          price: '',
-          type: '',
-          intro: '',
-        },
-        uploadList: [],
-        ruleValidate: {
-          name: [{
-            required: true,
-            message: '店铺名称不能为空',
-            trigger: 'blur'
-          }],
-          address: [{
-            required: true,
-            message: '店铺地址不能为空',
-            trigger: 'blur'
-          }],
-          elder: [{
-            required: true,
-            message: '适合人群不能为空',
-            trigger: 'blur'
-          }],
-          price: [{
-            required: true,
-            message: '店铺价格不能为空',
-            trigger: 'blur'
-          }],
-          type: [{
-            required: true,
-            message: '店铺类型不能为空',
-            trigger: 'blur'
-          }],
-          intro: [{
-            required: true,
-            message: '店铺简介不能为空',
-            trigger: 'blur'
-          }],
-        }
-      }
-    },
-    methods: {
-      handleSubmit(name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            this.$Message.success('注册成功！');
-            this.$router.push('/home');
-          } else {
-            this.$Message.error('请将信息填写完整！');
-          }
-        })
-      },
-      handleReset(name) {
-        this.$refs[name].resetFields();
-      },
-      handleRemove (file) {
-            // 从 upload 实例删除数据
-            const fileList = this.$refs.upload.fileList;
-            this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-        },
-        handleFormatError2 (file) {
-            this.$Notice.warning({
-                title: '文件格式不正确',
-                desc: '文件 ' + file.name + ' 格式不正确，请上传 zip 格式的文件。'
-            });
-        },
-    },
-    mounted() {
-            this.uploadList = this.$refs.upload.fileList;
-        }
-  }
 
+<script>
+export default {
+  data() {
+    return {
+      formValidate: {
+        name: '',
+        address: '',
+        elder: '',
+        price: '',
+        type: '',
+        intro: '',
+      },
+      uploadList: [],
+      ruleValidate: {
+        name: [{
+          required: true,
+          message: '店铺名称不能为空',
+          trigger: 'blur'
+        }],
+        address: [{
+          required: true,
+          message: '店铺地址不能为空',
+          trigger: 'blur'
+        }],
+        elder: [{
+          required: true,
+          message: '适合人群不能为空',
+          trigger: 'blur'
+        }],
+        price: [{
+          required: true,
+          message: '店铺价格不能为空',
+          trigger: 'blur'
+        }],
+        type: [{
+          required: true,
+          message: '店铺类型不能为空',
+          trigger: 'blur'
+        }],
+        intro: [{
+          required: true,
+          message: '店铺简介不能为空',
+          trigger: 'blur'
+        }],
+      }
+    }
+  },
+  methods: {
+    handleSubmit(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.$Message.success('注册成功！');
+          this.$router.push('/home');
+        } else {
+          this.$Message.error('请将信息填写完整！');
+        }
+      })
+    },
+    handleReset(name) {
+      this.$refs[name].resetFields();
+    },
+    handleRemove (file) {
+          // 从 upload 实例删除数据
+          const fileList = this.$refs.upload.fileList;
+          this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+      },
+      handleFormatError2 (file) {
+          this.$Notice.warning({
+              title: '文件格式不正确',
+              desc: '文件 ' + file.name + ' 格式不正确，请上传 zip 格式的文件。'
+          });
+      },
+  },
+  mounted() {
+          this.uploadList = this.$refs.upload.fileList;
+      }
+}
 </script>

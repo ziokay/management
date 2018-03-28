@@ -7,18 +7,16 @@ export const loginRouter = {
     meta: {
         title: '登录'
     },
-    component: () =>
-        import ('@/views/login.vue')
+    component: () => import ('@/views/login/login.vue')
 };
 
-export const register = {
-    path: '/register',
-    name: 'register',
+export const signupRouter = {
+    path: '/signup',
+    name: 'signup',
     meta: {
         title: '注册',
     },
-    component: () =>
-        import ('@/views/register.vue')
+    component: () => import ('@/views/signup/signup.vue')
 }
 
 export const page404 = {
@@ -27,8 +25,7 @@ export const page404 = {
     meta: {
         title: '404-页面不存在'
     },
-    component: () =>
-        import ('@/views/error-page/404.vue')
+    component: () => import ('@/views/error-page/404.vue')
 };
 
 export const page403 = {
@@ -37,8 +34,7 @@ export const page403 = {
         title: '403-权限不足'
     },
     name: 'error-403',
-    component: () =>
-        import ('@//views/error-page/403.vue')
+    component: () => import ('@//views/error-page/403.vue')
 };
 
 export const page500 = {
@@ -47,15 +43,13 @@ export const page500 = {
         title: '500-服务端错误'
     },
     name: 'error-500',
-    component: () =>
-        import ('@/views/error-page/500.vue')
+    component: () => import ('@/views/error-page/500.vue')
 };
 
 export const locking = {
     path: '/locking',
     name: 'locking',
-    component: () =>
-        import ('@/views/main-components/lockscreen/components/locking-page.vue')
+    component: () => import ('@/views/main-components/lockscreen/components/locking-page.vue')
 };
 
 // 作为Main组件的子页面展示但是不在左侧菜单显示的路由写在otherRouter里
@@ -73,8 +67,7 @@ export const otherRouter = {
             // mate: {
             //     rquireAuth: true
             // },
-            component: () =>
-                import ('@/views/home/home.vue')
+            component: () => import ('@/views/home/home.vue')
         },
         {
             path: 'ownspace',
@@ -83,8 +76,7 @@ export const otherRouter = {
             // mate: {
             //     rquireAuth: true
             // },
-            component: () =>
-                import ('@/views/own-space/own-space.vue')
+            component: () => import ('@/views/own-space/own-space.vue')
         },
     ]
 };
@@ -103,35 +95,33 @@ export const appRouter = [{
             path: 'today-menu',
             name: 'file-upload',
             title: '今日菜单',
-            component: () => 
-                import ('@/views/home/home.vue')
-            
+            component: () => import ('@/views/home/home.vue')
         }, ]
     },
     {
-        path: '/',
-        name: 'tables',
-        title: '饭桌人员列表',
+        path: '/table',
+        name: 'table',
+        title: '饭桌列表',
         component: Main,
         // mate: {
         //     rquireAuth: true
         // },
-        children: [{
-            path: 'table-list',
-            title: '饭桌人员列表',
-            name: 'result',
-            icon: 'edit',
-            component: () => 
-                import ('@/views/tables/table-list.vue')
-            
-        }, ]
+        children: [
+            {
+                path: 'list',
+                title: '饭桌人员列表',
+                name: 'table-list',
+                icon: 'edit',
+                component: () => import ('@/views/table/list.vue')
+            }
+        ]
     },
 ];
 
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [
     loginRouter,
-    register,
+    signupRouter,
     otherRouter,
     locking,
     ...appRouter,

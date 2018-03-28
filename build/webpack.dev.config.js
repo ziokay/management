@@ -37,9 +37,9 @@ module.exports = merge(webpackBaseConfig, {
             {
                 from: 'src/views/main-components/theme-switch/theme'
             },
-            {
-                from: 'src/views/my-components/text-editor/tinymce'
-            }
+            // {
+            //     from: 'src/views/my-components/text-editor/tinymce'
+            // }
         ], {
             ignore: [
                 'text-editor.vue'
@@ -48,11 +48,11 @@ module.exports = merge(webpackBaseConfig, {
     ],
     devServer: {
         proxy: {
-            '/dev': {
+            '/proxy': {
                 target: 'http://116.196.119.120/api/v1',
                 changeOrigin: true,
                 pathRewrite: {
-                    "^/dev" : ""
+                    "^/proxy" : ""
                 }
             }
         }

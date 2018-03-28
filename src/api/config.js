@@ -1,13 +1,13 @@
 import env from '../../build/env';
 
 const baseURL = env === 'development'
-    ? '/dev'
+    ? '/proxy'
     : env === 'production'
-        ? 'https://www.url.com'
-        : 'https://debug.url.com';
+        ? 'http://116.196.119.120/api/v1'
+        : '/proxy';
 
-export const config = {
-    baseURL, // baseURL: 'http://116.196.119.120/api/v1'
+export const CONFIG = {
+    baseURL,
     headers: {
         'X-Requested-With': 'XMLHttpRequest'
     },
@@ -15,10 +15,10 @@ export const config = {
     timeout: 7000
 };
 
-export const url = {
-    // users
-    POST_LOGIN: '/users/login' ,// 登录
-    GET_USER_INFO:'/users/show' , //获取用户信息
-    POST_USER_INFO:'/users/update',//更新用户信息
-
+export const URI = {
+    // user
+    LOGIN: '/users/login', // 登录
+    USERINFO: '/users/show', // 用户信息
+    // hotels
+    HOTEL: '/hotels' // 添加 店铺
 };
