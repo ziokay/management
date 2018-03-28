@@ -7,16 +7,16 @@ export const loginRouter = {
     meta: {
         title: '登录'
     },
-    component: () => import ('@/views/login/login.vue')
+    component: () => import('@/views/login/login.vue')
 };
 
 export const signupRouter = {
     path: '/signup',
     name: 'signup',
     meta: {
-        title: '注册',
+        title: '注册商家',
     },
-    component: () => import ('@/views/signup/signup.vue')
+    component: () => import('@/views/signup/signup.vue')
 }
 
 export const page404 = {
@@ -25,7 +25,7 @@ export const page404 = {
     meta: {
         title: '404-页面不存在'
     },
-    component: () => import ('@/views/error-page/404.vue')
+    component: () => import('@/views/error-page/404.vue')
 };
 
 export const page403 = {
@@ -34,7 +34,7 @@ export const page403 = {
         title: '403-权限不足'
     },
     name: 'error-403',
-    component: () => import ('@//views/error-page/403.vue')
+    component: () => import('@//views/error-page/403.vue')
 };
 
 export const page500 = {
@@ -43,13 +43,13 @@ export const page500 = {
         title: '500-服务端错误'
     },
     name: 'error-500',
-    component: () => import ('@/views/error-page/500.vue')
+    component: () => import('@/views/error-page/500.vue')
 };
 
 export const locking = {
     path: '/locking',
     name: 'locking',
-    component: () => import ('@/views/main-components/lockscreen/components/locking-page.vue')
+    component: () => import('@/views/main-components/lockscreen/components/locking-page.vue')
 };
 
 // 作为Main组件的子页面展示但是不在左侧菜单显示的路由写在otherRouter里
@@ -58,64 +58,71 @@ export const otherRouter = {
     name: 'otherRouter',
     redirect: '/home',
     component: Main,
-    children: [{
+    children: [
+        {
             path: 'home',
             title: {
                 i18n: 'home'
             },
             name: 'home_index',
-            // mate: {
-            //     rquireAuth: true
-            // },
-            component: () => import ('@/views/home/home.vue')
+            component: () => import('@/views/home/home.vue')
         },
         {
             path: 'ownspace',
             title: '个人中心',
             name: 'ownspace_index',
-            // mate: {
-            //     rquireAuth: true
-            // },
-            component: () => import ('@/views/own-space/own-space.vue')
+            component: () => import('@/views/own-space/own-space.vue')
         },
     ]
 };
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
-export const appRouter = [{
-        path: '/',
+export const appRouter = [
+    {
+        path: '/hotel',
         icon: 'clipboard',
-        name: 'component',
-        title: '今日菜单',
+        name: 'hotel',
+        title: '店家信息',
         component: Main,
-        // mate: {
-        //     rquireAuth: true
-        // },
-        children: [{
-            path: 'today-menu',
-            name: 'file-upload',
-            title: '今日菜单',
-            component: () => import ('@/views/home/home.vue')
-        }, ]
+        children: [
+            {
+                path: 'detail',
+                name: 'hotel-detail',
+                title: '店家信息',
+                component: () => import('@/views/hotel/detail.vue')
+            }
+        ]
+    },
+    {
+        path: '/menu',
+        icon: 'clipboard',
+        name: 'menu',
+        title: '菜单发布',
+        component: Main,
+        children: [
+            {
+                path: 'detail',
+                name: 'menu-detail',
+                title: '菜单发布',
+                component: () => import('@/views/menu/detail.vue')
+            }
+        ]
     },
     {
         path: '/table',
         name: 'table',
-        title: '饭桌列表',
+        title: '饭桌订单',
+        icon: 'edit',
         component: Main,
-        // mate: {
-        //     rquireAuth: true
-        // },
         children: [
             {
                 path: 'list',
-                title: '饭桌人员列表',
+                title: '饭桌订单',
                 name: 'table-list',
-                icon: 'edit',
-                component: () => import ('@/views/table/list.vue')
+                component: () => import('@/views/table/list.vue')
             }
         ]
-    },
+    }
 ];
 
 // 所有上面定义的路由都要写在下面的routers里

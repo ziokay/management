@@ -7,8 +7,8 @@ const http = axios.create(CONFIG);
 http.interceptors.request.use(
     config => {
         const token = Cookie.get('token');
-        if (token) { // 如果存在 token，每个http header都加上 token
-            config.headers['Authorization'] = `Bearer ${token}`;
+        if (token && config.params) { // 如果存在 token，每个 request 都加上 token
+            config.params.token = token;
         }
         return config;
     },
@@ -57,7 +57,7 @@ const api = {
         return http.get(URI.USERINFO)
             .then(res => {
                 const data = res.data.data;
-                if (data) {
+                if (data && data.hotel) {
                     return data;
                 } else {
                     return Promise.reject(res.data);
@@ -65,6 +65,114 @@ const api = {
             })
             .catch(err => {
                 console.log('err getUserInfo', err.message);
+                return Promise.reject(err);
+            });
+    },
+    signup ({ data }) {
+        return http.post(URI.HOTEL, data)
+            .then(res => {
+                const data = res.data;
+                if (data.status === 201 && data.data) {
+                    return data.data;
+                } else {
+                    return Promise.reject(data);
+                }
+            })
+            .catch(err => {
+                console.log('err getUserInfo', err.message);
+                return Promise.reject(err);
+            });
+    },
+    /**
+     * 商家信息
+     */
+    getHotelInfo ({ hotel_id }) {
+        return http.get(`${URI.HOTEL}/${hotel_id}`)
+            .then(res => {
+                const data = res.data.data.data;
+                if (data) {
+                    return data;
+                } else {
+                    return Promise.reject(res.data);
+                }
+            })
+            .catch(err => {
+                console.log('err getHotelInfo', err.message);
+                return Promise.reject(err);
+            });
+    },
+    // name 	string 	是 	新店铺名称 	新店铺名称
+    // description 	string 	是 	新店铺简介 	新店铺简介
+    // address 	string 	是 	新店铺地址 	新店铺地址
+    // lng 	number 	是 	新店铺经度 	123.123
+    // lat 	number 	是 	新店铺维度 	123.123
+    // people 	string 	是 	新适用人群 	新适用人群
+    // price 	string 	是 	新店铺价格 	999
+    // type 	number 	是 	新店铺类型 	0
+    // other 	string 	是 	新其它提示
+    setHotelInfo ({ hotel_id, data }) {
+        return http.put(`${URI.HOTEL}/${hotel_id}`, data)
+            .then(res => {
+                const data = res.data.data;
+                if (data.status === 201 && data.data) {
+                    return data.data;
+                } else {
+                    return Promise.reject(res.data);
+                }
+            })
+            .catch(err => {
+                console.log('err setHotelInfo', err.message);
+                return Promise.reject(err);
+            });
+    },
+    /**
+     * 菜单发布
+     */
+    getMenu ({ hotel_id }) {
+        return http.get(`${URI.HOTEL}/${hotel_id}/menu`)
+            .then(res => {
+                const data = res.data;
+                if (data.status === 201 && data.data) {
+                    return data.data;
+                } else {
+                    return Promise.reject(res.data);
+                }
+            })
+            .catch(err => {
+                console.log('err getMenu', err.message);
+                return Promise.reject(err);
+            });
+    },
+    setMenu ({ menu_id, menu }) {
+        return http.put(`/menus/${menu_id}`, { menu })
+            .then(res => {
+                const data = res.data;
+                if (data.status === 201 && data.data) {
+                    return data.data;
+                } else {
+                    return Promise.reject(res.data);
+                }
+            })
+            .catch(err => {
+                console.log('err setMenu', err.message);
+                return Promise.reject(err);
+            });
+    },
+    /**
+     * 饭桌订单
+     */
+    getOrders ({ hotel_id }) {
+        return http.get(`${URI.HOTEL}/${hotel_id}/orders`)
+            .then(res => {
+                const data = res.data.data;
+                if (data) {
+                    return data;
+                } else {
+                    return Promise.reject(res.data);
+                }
+            })
+            .catch(err => {
+                console.log('err getOrders', err.message);
                 return Promise.reject(err);
             });
     }

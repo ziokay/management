@@ -16,9 +16,9 @@ export const CONFIG = {
 };
 
 export const URI = {
-    // user
     LOGIN: '/users/login', // 登录
     USERINFO: '/users/show', // 用户信息
-    // hotels
-    HOTEL: '/hotels' // 添加 店铺
+    HOTEL: '/hotels' // 店铺
+    // MENU: '/menus'
+    // ORDER: '/orders' // 订单
 };

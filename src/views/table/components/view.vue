@@ -20,17 +20,13 @@ export default {
         status: {
             type: Number,
             require: true
-        },
-        title: {
-            type: String,
-            require: true
         }
     },
     data () {
         return {
             props: {
                 icon: 'android-list',
-                title: this.title,
+                title: '饭桌订单',
                 columns: {
                     index: {
                         type: 'index',
@@ -39,48 +35,34 @@ export default {
                         width: 65
                     },
                     name: {
-                        title: '店名',
+                        title: '姓名',
                         key: 'name',
                         align: 'center'
                     },
-                    address: {
-                        title: '地址',
-                        key: 'address',
+                    age: {
+                        title: '年龄',
+                        key: 'age',
                         ellipsis: true,
                         align: 'center'
                     },
-                    people: {
-                        title: '适宜人群',
-                        key: 'people',
-                        ellipsis: true,
+                    phone: {
+                        title: '电话号码',
+                        key: 'phone',
                         align: 'center'
                     },
-                    price: {
-                        title: '价位',
-                        key: 'price',
+                    health: {
+                        title: '健康状况',
+                        key: 'health',
                         align: 'center'
                     },
-                    doc: {
-                        title: '附件',
-                        key: 'doc',
-                        align: 'center',
-                        render: (h, params) => {
-                            return h('a', {
-                                attrs: {
-                                    href: params.row.doc,
-                                    rel: 'nofollow'
-                                }
-                            }, '下载');
-                        }
-                    },
-                    owner_name: {
-                        title: '店主名',
-                        key: 'owner_name',
+                    end: {
+                        title: '截至日期',
+                        key: 'end',
                         align: 'center'
                     },
-                    owner_phone: {
-                        title: '店主手机号',
-                        key: 'owner_phone',
+                    note: {
+                        title: '提示',
+                        key: 'note',
                         align: 'center'
                     },
                     show_more: {
@@ -107,8 +89,8 @@ export default {
                     }
                 },
                 checked: [
-                    'index', 'name', 'address', 'price',
-                    'owner_name', 'owner_phone', 'show_more'
+                    'index', 'name', 'age', 'phone','health',
+                    'note','end','show_more'
                 ],
                 data: [],
                 total: 0,
@@ -124,24 +106,14 @@ export default {
     },
     methods: {
         fetchData (payload) {
-            this.ajax(this.method, payload)
-                .then(({ data, total }) => {
-                    this.props.data = data;
-                    this.props.total = total;
-                })
-                .catch((err) => {
-                    if (err.logout) {
-                        this.$Message.error('用户登录有效期已失效，请重新登录');
-                        // 退出登录状态
-                        this.$store.commit('logout', this);
-                        this.$store.commit('clearOpenedSubmenu');
-                        this.$router.push({
-                            name: 'login'
-                        });
-                    } else {
-                        this.$Message.error('请求数据时发生错误');
-                    }
-                });
+        //     this.ajax(this.method, payload)
+        //         .then(({ data, total }) => {
+        //             this.props.data = data;
+        //             this.props.total = total;
+        //         })
+        //         .catch((err) => {
+        //             this.$Message.error('请求数据时发生错误');
+        //         });
         }
     }
 };
