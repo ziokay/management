@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import TableCard from '../../../components/TableCard';
+import TableCard from '@/components/TableCard';
 export default {
     name: 'PageView',
     components: {

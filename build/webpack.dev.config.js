@@ -29,11 +29,14 @@ module.exports = merge(webpackBaseConfig, {
             minChunks: Infinity
         }),
         new HtmlWebpackPlugin({
-            title: 'iView admin v' + package.version,
+            title: '商家管理平台 v' + package.version,
             filename: '../index.html',
             inject: false
         }),
         new CopyWebpackPlugin([
+            {
+                from: 'src/images/minLogo.png'
+            },
             {
                 from: 'src/views/main-components/theme-switch/theme'
             },

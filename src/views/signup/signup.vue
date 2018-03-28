@@ -29,24 +29,24 @@
   <div class="register">
   <div class="reg">
     <h2>商家注册</h2>
-    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+    <Form ref="form" :model="form" :rules="ruleValidate" :label-width="80">
       <FormItem label="店铺名称" prop="name">
-        <Input v-model="formValidate.name" placeholder="请输入店铺名称"></Input>
+        <Input v-model="form.name" placeholder="请输入店铺名称"></Input>
       </FormItem>
       <FormItem label="店铺地址" prop="address">
-        <Input v-model="formValidate.address" placeholder="请输入店铺地址"></Input>
+        <Input v-model="form.address" placeholder="请输入店铺地址"></Input>
       </FormItem>
       <FormItem label="适合人群" prop="elder">
-        <Input v-model="formValidate.elder" placeholder="请输入适合人群"></Input>
+        <Input v-model="form.elder" placeholder="请输入适合人群"></Input>
       </FormItem>
       <FormItem label="店铺价格" prop="price">
-        <Input v-model="formValidate.price" placeholder="请输入店铺价格"></Input>
+        <Input v-model="form.price" placeholder="请输入店铺价格"></Input>
       </FormItem>
       <FormItem label="店铺类型" prop="type">
-        <Input v-model="formValidate.type" placeholder="请输入店铺价格"></Input>
+        <Input v-model="form.type" placeholder="请输入店铺价格"></Input>
       </FormItem>
       <FormItem label="店铺简介" prop="intro">
-        <Input v-model="formValidate.intro" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入店铺简介"></Input>
+        <Input v-model="form.intro" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入店铺简介"></Input>
       </FormItem>
       <FormItem label="其他提示："  prop="other">
           <div style="display:inline-block;width:150px;">
@@ -62,8 +62,8 @@
           </div>
       </FormItem>
       <FormItem>
-        <Button type="primary" @click="handleSubmit('formValidate')">注册</Button>
-        <Button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
+        <Button type="primary" @click="handleSubmit('form')">注册</Button>
+        <Button type="ghost" @click="handleReset('form')" style="margin-left: 8px">重置</Button>
       </FormItem>
     </Form>
   </div>
@@ -72,9 +72,10 @@
 
 <script>
 export default {
+  name: 'signup',
   data() {
     return {
-      formValidate: {
+      form: {
         name: '',
         address: '',
         elder: '',
@@ -121,12 +122,16 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$Message.success('注册成功！');
-          this.$router.push('/home');
-        } else {
-          this.$Message.error('请将信息填写完整！');
+          this.ajax.signup(this.form)
+              .then(data => {
+                this.$Message.success('注册成功！');
+                this.$router.push('/home');
+              })
+              .catch(err => {
+                this.$Message.error('注册失败，请将信息填写完整！');
+              });
         }
-      })
+      });
     },
     handleReset(name) {
       this.$refs[name].resetFields();
