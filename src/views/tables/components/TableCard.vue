@@ -1,25 +1,33 @@
 <style lang="less">
-
 </style>
 
 <template>
     <div>
         <Card>
             <p slot="title">
-                <Icon :type="iconType"></Icon>
+                <Icon :type="icon"></Icon>
                 {{ title }}
             </p>
             <Row type="flex" justify="center" align="bottom">
-                <Col span="23">
-                    <Checkbox-group v-model="columnsChecked" style="margin-bottom: 6px;">
-                        <template v-for="(value, key) of columnsDefined">
+                <Col span="18">
+                    <Checkbox-group v-model="checked" style="margin-bottom: 6px;">
+                        <template v-for="(value, key) in columns">
                             <Checkbox :label="key" :key="key">{{ value.title }}</Checkbox>
-                        </template> 
+                        </template>
                     </Checkbox-group>
                 </Col>
-                <Col span="1">
+                <Col span="6">
                     <div style="margin: 0 10px 10px 0; float: right;">
-                        <slot name="otherBtn"></slot>
+                        <template v-if="status">
+                            <Radio-group v-model="radioStatus" type="button">
+                                <template v-for="(value, key) in status" @on-change="changeRadioStatus">
+                                    <Radio :label="key" :key="key">{{ value }}</Radio>
+                                </template>
+                            </Radio-group>
+                        </template>
+                        <template v-else>
+                            <slot name="otherBtn"></slot>
+                        </template>
                     </div>
                 </Col>
             </Row>
@@ -27,16 +35,17 @@
                 <Table
                     :size="tableSize"
                     :columns="columnsShown"
-                    :data="tableData"
+                    :data="data"
+                    :loading="isLoading"
                     style="width: 100%;"
-                    highlight-row
+                    border
                 ></Table>
             </Row>
             <div style="margin: 10px;">
                 <Radio-group v-model="tableSize" type="button" size="small">
-                    <!-- <Radio label="large">大</Radio>
+                    <Radio label="large">大</Radio>
                     <Radio label="default">中</Radio>
-                    <Radio label="small">小</Radio> -->
+                    <Radio label="small">小</Radio>
                 </Radio-group>
                 <div style="float: right;">
                     <Page
@@ -44,7 +53,10 @@
                         :total="total"
                         :current="pageIndex"
                         @on-change="changePageIndex"
+                        :page-size="pageSize"
+                        @on-page-size-change="changePageSize"
                         show-elevator
+                        show-sizer
                         show-total
                     ></Page>
                 </div>
@@ -57,34 +69,44 @@
 export default {
     name: 'table-card',
     props: {
-        iconType: String,
+        icon: String,
         title: String,
-        columnsChecked: {  // 选择显示的表格列
+        checked: {          // 选择显示的表格列
             type: Array,
             default: []
         },
-        columnsDefined: Object, // 定义表格列的字段
-        tableSize: {            // 表格宽窄
+        columns: Object,    // 所有表格列的字段定义
+        initTableSize: {    // 表格宽窄
             type: String,
             default: 'default',
             validator: (value) => {
                 return value === 'large' || value === 'default' || value === 'small';
             }
         },
-        tableData: Array,       // 表格内数据
-        total: {                // 数据库上数据总量
+        data: Array,        // 表格内数据
+        total: {            // 数据库上数据总量
             type: Number,
-            require: true
+            default: 0
+        },
+        status: {
+            type: Object,
+            default: null
+        },
+        initStatus: {
+            type: Number,
+            default: 0
         }
     },
     data () {
         return {
             // 表格相关
-            // tableLoading: true, // 设置是否显示加载状态
-
+            isLoading: true, // 设置是否显示加载状态
+            tableSize: this.initTableSize,
             // 分页Page相关
-            pageSize: 20, // 每页条数
-            pageIndex: 1
+            pageIndex: 1, // 表示第几页的序号
+            pageSize: 10, // 每页条数
+            // 数据相关
+            radioStatus: this.initStatus // 后台接口参数
         };
     },
     computed: {
@@ -95,7 +117,7 @@ export default {
                 hasShowMore = false,
                 hasEdit = false;
 
-            this.columnsChecked.forEach(col => {
+            this.checked.forEach(col => {
                 switch(col) {
                     case 'checkbox':
                         hasCheckbox = true;
@@ -110,49 +132,57 @@ export default {
                         hasEdit = true;
                         break;
                     default:
-                        selectedColumns.push(this.columnsDefined[col]);
+                        selectedColumns.push(this.columns[col]);
                 }
             });
 
             if (hasIndex) {
-                selectedColumns.unshift(this.columnsDefined['index']);
+                selectedColumns.unshift(this.columns['index']);
             }
             if (hasCheckbox) {
-                selectedColumns.unshift(this.columnsDefined['checkbox']);
+                selectedColumns.unshift(this.columns['checkbox']);
             }
             if (hasShowMore) {
-                selectedColumns.push(this.columnsDefined['show_more']);
+                selectedColumns.push(this.columns['show_more']);
             }
             if (hasEdit) {
-                selectedColumns.push(this.columnsDefined['edit']);
+                selectedColumns.push(this.columns['edit']);
             }
             return selectedColumns;
+        },
+        query () {
+            return {
+                index: this.pageIndex,
+                size: this.pageSize,
+                status: this.radioStatus
+            };
         }
     },
     watch: {
-        tableData () {
-            this.tableLoading = false;
+        query (newQuery) {
+            this.refreshData(newQuery);
+        },
+        data () {
+            this.isLoading = false;
         }
     },
     methods: {
-        changePageIndex (newPageIndex) {
-            this.pageIndex = newPageIndex;
-            this.refreshTableData(this.pageIndex, this.pageSize);
-
+        changePageIndex (newIndex) {
+            this.pageIndex = newIndex;
         },
-        refreshTableData (pageIndex, pageSize) {
-            this.tableLoading = true;
-            this.$emit('fetchData', {
-                pageIndex,
-                pageSize
-            });
+        changePageSize (newSize) {
+            this.pageSize = newSize;
+        },
+        changeRadioStatus (newStatus) {
+            this.radioStatus = newStatus;
+        },
+        refreshData (query) {
+            this.isLoading = true;
+            this.$emit('fetchData', query);
         }
     },
-    created () {
-        this.refreshTableData(1, 10);
-    },
     activated () {
-        this.refreshTableData(this.pageIndex, this.pageSize);
+        this.refreshData(this.query);
     }
 };
 </script>
