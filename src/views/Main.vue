@@ -12,8 +12,8 @@
                 :open-names="openedSubmenuArr"
                 :menu-list="menuList">
                 <div slot="top" class="logo-con">
-                    <img v-show="!shrink"  src="../images/maxLogo.png" key="max-logo" />
-                    <img v-show="shrink" src="../images/minLogo.png" key="min-logo" />
+                    <img v-show="!shrink"  src="@/images/maxLogo.png" key="max-logo" />
+                    <img v-show="shrink" src="@/images/minLogo.png" key="min-logo" />
                 </div>
             </shrinkable-menu>
         </div>

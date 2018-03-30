@@ -7,8 +7,8 @@ const http = axios.create(CONFIG);
 http.interceptors.request.use(
     config => {
         const token = Cookie.get('token');
-        if (token && config.params) { // 如果存在 token，每个 request 都加上 token
-            config.params.token = token;
+        if (token) { // 如果存在 token，每个 request 都加上 token
+            config.params = { token };
         }
         return config;
     },
@@ -39,11 +39,8 @@ const api = {
             .then(res => {
                 const data = res.data.data;
                 if (data && data.token) {
-                    return {
-                        token: data.token,
-                        id: data.user.id,
-                        phone
-                    };
+                    Cookie.set('token', data.token);
+                    return data.user;
                 } else {
                     return Promise.reject(res.data);
                 }
@@ -57,7 +54,8 @@ const api = {
         return http.get(URI.USERINFO)
             .then(res => {
                 const data = res.data.data;
-                if (data && data.hotel) {
+                if (data) {
+                    Cookie.set('user', data.phone);
                     return data;
                 } else {
                     return Promise.reject(res.data);
@@ -68,7 +66,17 @@ const api = {
                 return Promise.reject(err);
             });
     },
-    signup ({ data }) {
+    // name 	string 	是 	店铺名称 	店铺名称
+    // description 	string 	是 	店铺简介 	店铺简介
+    // address 	string 	是 	店铺地址 	店铺地址
+    // lng 	number 	是 	店铺经度 	123.123
+    // lat 	number 	是 	店铺维度 	123.123
+    // people 	string 	是 	适用人群 	适用人群
+    // price 	number 	是 	店铺价格 	1000
+    // type 	number 	是 	店铺类型 	0
+    // other 	string 	是 	其它提示 	其它提示
+    // doc 	file 	否 	上传资料压缩包(可选),后缀名必须为zip
+    signup (data) {
         return http.post(URI.HOTEL, data)
             .then(res => {
                 const data = res.data;
@@ -79,7 +87,7 @@ const api = {
                 }
             })
             .catch(err => {
-                console.log('err getUserInfo', err.message);
+                console.log('err signup', err.message);
                 return Promise.reject(err);
             });
     },
