@@ -175,7 +175,10 @@ const api = {
                 console.log('err getOrders', err.message);
                 return Promise.reject(err);
             });
+    },
+    passOrder({finish}){
+        return http.post()
     }
 };
 
-export default api;
+export default (method, payload) => method && payload ? api[method](payload) : api;

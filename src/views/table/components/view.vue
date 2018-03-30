@@ -66,25 +66,43 @@ export default {
                         align: 'center'
                     },
                     show_more: {
-                        title: '详情',
+                        // title: '详情',
                         key: 'show_more',
                         align: 'center',
                         width: 100,
+                        // render: (h, params) => {
+                        //     return h('Button', {
+                        //         props: {
+                        //             type: 'primary',
+                        //             size: 'default'
+                        //         },
+                        //         on: {
+                        //             click: () => {
+                        //                 this.$router.push({
+                        //                     name: 'table-detail',
+                        //                     params: params.row
+                        //                 });
+                        //             }
+                        //         }
+                        //     }, '详情');
+                        // }
                         render: (h, params) => {
-                            return h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'default'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.$router.push({
-                                            name: 'table-detail',
-                                            params: params.row
-                                        });
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.passOrder()
+                                        }
                                     }
-                                }
-                            }, '详情');
+                                }, '通过'),
+                            ]);
                         }
                     }
                 },
@@ -95,7 +113,6 @@ export default {
                 data: [],
                 total: 0,
                 status: {
-                    [-1]: '已拒绝',
                     [0]: '待处理',
                     [1]: '已通过' 
                 },
@@ -105,15 +122,30 @@ export default {
         };
     },
     methods: {
+        passOrder(){
+            return http.post(`${URI.HOTEL}/${hotel_id}/orders`,finish)
+                .then(res => {
+                    const data = res.data;
+                    if (data.status ===201 && data.data) {
+                        return data.data;
+                    } else {
+                        return Promise.reject(data);
+                    }
+                })
+                .catch(err => {
+                    console.log('err possOrder', err.message);
+                    return Promise.reject(err);
+                })
+        },
         fetchData (payload) {
-        //     this.ajax(this.method, payload)
-        //         .then(({ data, total }) => {
-        //             this.props.data = data;
-        //             this.props.total = total;
-        //         })
-        //         .catch((err) => {
-        //             this.$Message.error('请求数据时发生错误');
-        //         });
+            this.ajax(this.method, payload)
+                .then(({ data, total }) => {
+                    this.props.data = data;
+                    this.props.total = total;
+                })
+                .catch((err) => {
+                    this.$Message.error('请求数据时发生错误');
+                });
         }
     }
 };

@@ -13,7 +13,7 @@ export default {
     },
     data () {
         return {
-            title: '商家列表',
+            title: '饭桌订单',
             initStatus: 1
         };
     }
