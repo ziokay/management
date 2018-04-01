@@ -54,8 +54,9 @@ const api = {
         return http.get(URI.USERINFO)
             .then(res => {
                 const data = res.data.data;
-                if (data) {
-                    Cookie.set('user', data.phone);
+                if (data && data.hotel) {
+                    Cookie.set('user', data.name);
+                    Cookie.set('hotelID', data.hotel.id);
                     return data;
                 } else {
                     return Promise.reject(res.data);
@@ -94,8 +95,8 @@ const api = {
     /**
      * 商家信息
      */
-    getHotelInfo ({ hotel_id }) {
-        return http.get(`${URI.HOTEL}/${hotel_id}`)
+    getHotelInfo ({ hotelID }) {
+        return http.get(`${URI.HOTEL}/${hotelID}`)
             .then(res => {
                 const data = res.data.data.data;
                 if (data) {
@@ -118,8 +119,8 @@ const api = {
     // price 	string 	是 	新店铺价格 	999
     // type 	number 	是 	新店铺类型 	0
     // other 	string 	是 	新其它提示
-    setHotelInfo ({ hotel_id, data }) {
-        return http.put(`${URI.HOTEL}/${hotel_id}`, data)
+    setHotelInfo ({ hotelID, data }) {
+        return http.put(`${URI.HOTEL}/${hotelID}`, data)
             .then(res => {
                 const data = res.data.data;
                 if (data.status === 201 && data.data) {
@@ -136,12 +137,13 @@ const api = {
     /**
      * 菜单发布
      */
-    getMenu ({ hotel_id }) {
-        return http.get(`${URI.HOTEL}/${hotel_id}/menu`)
+    getMenu ({ hotelID }) {
+        return http.get(`${URI.HOTEL}/${hotelID}/menu`)
             .then(res => {
                 const data = res.data;
-                if (data.status === 201 && data.data) {
-                    return data.data;
+                if (data.data && data.data.menu) {
+                    Cookie.set('menuID', data.data.id);
+                    return JSON.parse(data.data.menu);
                 } else {
                     return Promise.reject(res.data);
                 }
@@ -151,8 +153,8 @@ const api = {
                 return Promise.reject(err);
             });
     },
-    setMenu ({ menu_id, menu }) {
-        return http.put(`/menus/${menu_id}`, { menu })
+    setMenu ({ menuID, menu }) {
+        return http.put(`/menus/${menuID}`, { menu })
             .then(res => {
                 const data = res.data;
                 if (data.status === 201 && data.data) {
@@ -169,8 +171,8 @@ const api = {
     /**
      * 饭桌订单
      */
-    getOrders ({ hotel_id }) {
-        return http.get(`${URI.HOTEL}/${hotel_id}/orders`)
+    getOrders ({ hotelID }) {
+        return http.get(`${URI.HOTEL}/${hotelID}/orders`)
             .then(res => {
                 const data = res.data.data;
                 if (data) {
@@ -189,4 +191,4 @@ const api = {
     }
 };
 
-export default (method, payload) => method && payload ? api[method](payload) : api;
+export default (method, payload) => method ? api[method](payload) : api;

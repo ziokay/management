@@ -2,66 +2,65 @@
 </style>
 
 <template>
-    <div>
-        <Card>
-            <p slot="title">
-                <Icon :type="icon"></Icon>
-                {{ title }}
-            </p>
-            <Row type="flex" justify="center" align="bottom">
-                <Col span="18">
-                    <!-- <Checkbox-group v-model="checked" style="margin-bottom: 6px;">
-                        <template v-for="(value, key) in columns">
-                            <Checkbox :label="key" :key="key">{{ value.title }}</Checkbox>
-                        </template>
-                    </Checkbox-group> -->
-                </Col>
-                <Col span="6">
-                    <div style="margin: 0 10px 10px 0; float: right;">
-                        <template v-if="status">
-                            <Radio-group v-model="radioStatus" type="button">
-                                <template v-for="(value, key) in status" @on-change="changeRadioStatus">
-                                    <Radio :label="key" :key="key">{{ value }}</Radio>
-                                </template>
-                            </Radio-group>
-                        </template>
-                        <template v-else>
-                            <slot name="otherBtn"></slot>
-                        </template>
-                    </div>
-                </Col>
-            </Row>
-            <Row type="flex" justify="center" align="middle">
-                <Table
-                    :size="tableSize"
-                    :columns="columnsShown"
-                    :data="data"
-                    style="width: 100%;"
-                    border
-                ></Table>
-            </Row>
-            <div style="margin: 10px;">
-                <Radio-group v-model="tableSize" type="button" size="small">
-                    <Radio label="large">大</Radio>
-                    <Radio label="default">中</Radio>
-                    <Radio label="small">小</Radio>
-                </Radio-group>
-                <div style="float: right;">
-                    <Page
-                        size="small"
-                        :total="total"
-                        :current="pageIndex"
-                        @on-change="changePageIndex"
-                        :page-size="pageSize"
-                        @on-page-size-change="changePageSize"
-                        show-elevator
-                        show-sizer
-                        show-total
-                    ></Page>
+    <Card>
+        <p slot="title">
+            <Icon :type="icon"></Icon>
+            {{ title }}
+        </p>
+        <Row type="flex" justify="center" align="bottom">
+            <Col span="18">
+                <Checkbox-group v-model="checked" style="margin-bottom: 6px;">
+                    <template v-for="(value, key) in columns">
+                        <Checkbox :label="key" :key="key">{{ value.title }}</Checkbox>
+                    </template>
+                </Checkbox-group>
+            </Col>
+            <Col span="6">
+                <div style="margin: 0 10px 10px 0; float: right;">
+                    <template v-if="status">
+                        <Radio-group v-model="radioStatus" type="button">
+                            <template v-for="(value, key) in status" @on-change="changeRadioStatus">
+                                <Radio :label="key" :key="key">{{ value }}</Radio>
+                            </template>
+                        </Radio-group>
+                    </template>
+                    <template v-else>
+                        <slot name="otherBtn"></slot>
+                    </template>
                 </div>
+            </Col>
+        </Row>
+        <Row type="flex" justify="center" align="middle">
+            <Table
+                :size="tableSize"
+                :columns="columnsShown"
+                :data="data"
+                :loading="isLoading"
+                style="width: 100%;"
+                border
+            ></Table>
+        </Row>
+        <div style="margin: 10px;">
+            <Radio-group v-model="tableSize" type="button" size="small">
+                <Radio label="large">大</Radio>
+                <Radio label="default">中</Radio>
+                <Radio label="small">小</Radio>
+            </Radio-group>
+            <div style="float: right;">
+                <Page
+                    size="small"
+                    :total="total"
+                    :current="pageIndex"
+                    @on-change="changePageIndex"
+                    :page-size="pageSize"
+                    @on-page-size-change="changePageSize"
+                    show-elevator
+                    show-sizer
+                    show-total
+                ></Page>
             </div>
-        </Card>
-    </div>
+        </div>
+    </Card>
 </template>
 
 <script>
