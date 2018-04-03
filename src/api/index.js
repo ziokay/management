@@ -95,12 +95,13 @@ const api = {
     /**
      * 商家信息
      */
-    getHotelInfo ({ hotelID }) {
+    getHotelInfo () {
+        const hotelID = Cookie.get('hotelID');
         return http.get(`${URI.HOTEL}/${hotelID}`)
             .then(res => {
-                const data = res.data.data.data;
-                if (data) {
-                    return data;
+                const data = res.data;
+                if (data && data.data) {
+                    return data.data;
                 } else {
                     return Promise.reject(res.data);
                 }
@@ -119,11 +120,12 @@ const api = {
     // price 	string 	是 	新店铺价格 	999
     // type 	number 	是 	新店铺类型 	0
     // other 	string 	是 	新其它提示
-    setHotelInfo ({ hotelID, data }) {
+    setHotelInfo ({ data }) {
+        const hotelID = Cookie.get('hotelID');
         return http.put(`${URI.HOTEL}/${hotelID}`, data)
             .then(res => {
-                const data = res.data.data;
-                if (data.status === 201 && data.data) {
+                const data = res.data;
+                if (data && data.data) {
                     return data.data;
                 } else {
                     return Promise.reject(res.data);
@@ -157,8 +159,8 @@ const api = {
         return http.put(`/menus/${menuID}`, { menu })
             .then(res => {
                 const data = res.data;
-                if (data.status === 201 && data.data) {
-                    return data.data;
+                if (data.data && data.data.menu) {
+                    return JSON.parse(data.data.menu);
                 } else {
                     return Promise.reject(res.data);
                 }
