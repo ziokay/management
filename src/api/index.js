@@ -169,24 +169,44 @@ const api = {
     /**
      * 饭桌订单
      */
-    getOrders ({ hotel_id }) {
-        return http.get(`${URI.HOTEL}/${hotel_id}/orders`)
+    // getOrders ({ hotel_id }) {
+    //     return http.get(`${URI.HOTEL}/${hotel_id}/orders`)
+    //         .then(res => {
+    //             const data = res.data.data;
+    //             if (data) {
+    //                 return data;
+    //             } else {
+    //                 return Promise.reject(res.data);
+    //             }
+    //         })
+    //         .catch(err => {
+    //             console.log('err getOrders', err.message);
+    //             return Promise.reject(err);
+    //         });
+    // },
+    getTable ({ hotel_id,index: page, size: per_page, status }) {
+        const config = { params: { hotel_id,page, per_page, status } };
+        return http.get(`${URI.HOTEL}/${hotel_id}/orders`, config) // 默认发送 json
             .then(res => {
                 const data = res.data.data;
                 if (data) {
-                    return data;
+                    return {
+                        total: data.total,
+                        data
+                    };
                 } else {
                     return Promise.reject(res.data);
                 }
             })
             .catch(err => {
-                console.log('err getOrders', err.message);
+                console.log('getTable error: ', err.message);
                 return Promise.reject(err);
             });
     },
-    passOrder({finish}){
-        return http.post()
-    }
+    // setOrder ({ id, finish}){
+    //     const config = {params:{status: finish===1?1:0}};
+    //     return http.put(`${URL_}`)
+    // }
 };
 
-export default (method, payload) => method && payload ? api[method](payload) : api;
+export default (method, payload) => method ? api[method](payload) : api;

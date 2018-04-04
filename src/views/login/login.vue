@@ -77,9 +77,9 @@ export default {
                         content: '登录中......',
                         duration: 0
                     });
-                    this.ajax.login(this.form)
+                    this.ajax('login',this.form)
                         .then(data => {
-                            return this.ajax.getUserInfo();
+                            return this.ajax('getUserInfo');
                         })
                         .then(data => {
                             this.$Message.destroy();
