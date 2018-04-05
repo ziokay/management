@@ -48,7 +48,7 @@
                                 </DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
-                        <a href="#" @click.prevent="submitData(query, targetData)" style="margin:auto 20px;">
+                        <a href="#" @click.prevent="submitData(targetData)" style="margin:auto 20px;">
                             <Icon type="upload"></Icon>
                             保存
                         </a>
@@ -70,7 +70,7 @@
                 <Card>
                     <p slot="title">预览</p>
                     <div slot="extra">
-                        <a href="#" @click.prevent="fetchData(query)">
+                        <a href="#" @click.prevent="fetchData">
                             <Icon type="ios-loop-strong"></Icon>
                             刷新重置
                         </a>
@@ -120,10 +120,6 @@ export default {
     name: 'menu-setting',
     data () {
         return {
-            query: {
-                hotelID: Cookie.get('hotelID'),
-                menuID: Cookie.get('menuID')
-            },
             data: {},
             // card
             icon: 'android-list',
@@ -142,7 +138,7 @@ export default {
                 width: '41%',
                 height: '500px',
                 marginBottom: '15px',
-                'text-align': 'left',
+                // 'text-align': 'left',
             },
             operations: ['<<','>>'],
             // tree
@@ -405,7 +401,6 @@ export default {
             this.ajax('getMenu', payload)
                 .then((data) => {
                     this.data = data;
-                    this.query.menuID = Cookie.get('menuID');
                 })
                 .catch((err) => {
                     if (err.logout) {
@@ -421,9 +416,12 @@ export default {
                     }
                 });
         },
-        submitData ({ menuID }, data) {
-            const menu = JSON.stringify(data);
-            this.ajax('setMenu', { menuID, menu })
+        submitData (data) {
+            const payload = {
+                menuID: Cookie.get('menuID'),
+                menu: JSON.stringify(data)
+            };
+            this.ajax('setMenu', payload)
                 .then((data) => {
                     this.$Message.success('保存成功');
                 })
@@ -443,7 +441,7 @@ export default {
         }
     },
     activated () {
-        this.fetchData(this.query);
+        this.fetchData();
     }
 };
 </script>

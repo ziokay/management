@@ -77,7 +77,7 @@ const api = {
     // type 	number 	是 	店铺类型 	0
     // other 	string 	是 	其它提示 	其它提示
     // doc 	file 	否 	上传资料压缩包(可选),后缀名必须为zip
-    signup (data) {
+    signup ({ data }) {
         return http.post(URI.HOTEL, data)
             .then(res => {
                 const data = res.data;
@@ -139,7 +139,8 @@ const api = {
     /**
      * 菜单发布
      */
-    getMenu ({ hotelID }) {
+    getMenu () {
+        const hotelID = Cookie.get('hotelID');
         return http.get(`${URI.HOTEL}/${hotelID}/menu`)
             .then(res => {
                 const data = res.data;
@@ -173,7 +174,8 @@ const api = {
     /**
      * 饭桌订单
      */
-    getOrders ({ hotelID }) {
+    getOrders () {
+        const hotelID = Cookie.get('hotelID');
         return http.get(`${URI.HOTEL}/${hotelID}/orders`)
             .then(res => {
                 const data = res.data.data;
