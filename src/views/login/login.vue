@@ -77,19 +77,20 @@ export default {
                         .then(data => {
                             this.$Message.destroy();
                             this.$Message.success('登录成功');
-                            this.$router.push({
-                                name: 'home_index',
-                                params: data
-                            });
-                            this.loginLoading = false;
-                        })
-                        .catch(err => {
-                            this.$Message.destroy();
-                            if (data.status === 200 && !data.hotel) {
+                            if (data.hotel) {
+                                this.$router.push({
+                                    name: 'home_index',
+                                    params: data
+                                });
+                            } else {
                                 this.$router.push({
                                     name: 'signup'
                                 });
                             }
+                            this.loginLoading = false;
+                        })
+                        .catch(err => {
+                            this.$Message.destroy();
                             this.$Message.warning({
                                 content: '账号或密码有误，请重新输入',
                                 duration: 3
@@ -99,12 +100,7 @@ export default {
                         });
                 }
             });
-        },
-        // toSignupPage () {
-        //     this.$router.push({
-        //         name: 'signup'
-        //     });
-        // }
+        }
     }
 };
 </script>

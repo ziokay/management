@@ -70,7 +70,7 @@ export const otherRouter = {
         {
             path: 'ownspace',
             title: '个人中心',
-            name: 'ownspace_index',
+            name: 'ownspace',
             component: () => import('@/views/own-space/own-space.vue')
         },
     ]

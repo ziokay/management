@@ -19,7 +19,7 @@ http.interceptors.request.use(
 http.interceptors.response.use(
     res => {
         const data = res.data;
-        if (data.status === 401 && /JWT/g.test(data.message)) {
+        if (data.status === 401 && /token/g.test(data.message)) {
             const logoutError = {
                 logout: true,
                 message: 'token过期'
@@ -54,9 +54,11 @@ const api = {
         return http.get(URI.USERINFO)
             .then(res => {
                 const data = res.data.data;
-                if (data && data.hotel) {
+                if (data && data.name) {
                     Cookie.set('user', data.name);
-                    Cookie.set('hotelID', data.hotel.id);
+                    if (data.hotel) {
+                        Cookie.set('hotelID', data.hotel.id);
+                    }
                     return data;
                 } else {
                     return Promise.reject(res.data);
@@ -64,6 +66,22 @@ const api = {
             })
             .catch(err => {
                 console.log('err getUserInfo', err.message);
+                return Promise.reject(err);
+            });
+    },
+    setUserInfo (data) {
+        return http.patch(URI.NEW_USERINFO, data)
+            .then(res => {
+                const data = res.data.data;
+                if (data && data.name) {
+                    Cookie.set('user', data.name);
+                    return data;
+                } else {
+                    return Promise.reject(res.data);
+                }
+            })
+            .catch(err => {
+                console.log('err setUserInfo', err.message);
                 return Promise.reject(err);
             });
     },
@@ -77,11 +95,12 @@ const api = {
     // type 	number 	是 	店铺类型 	0
     // other 	string 	是 	其它提示 	其它提示
     // doc 	file 	否 	上传资料压缩包(可选),后缀名必须为zip
-    signup ({ data }) {
+    signup (data) {
         return http.post(URI.HOTEL, data)
             .then(res => {
                 const data = res.data;
                 if (data.status === 201 && data.data) {
+                    Cookie.set('hotelID', data.data.id);
                     return data.data;
                 } else {
                     return Promise.reject(data);
@@ -120,7 +139,7 @@ const api = {
     // price 	string 	是 	新店铺价格 	999
     // type 	number 	是 	新店铺类型 	0
     // other 	string 	是 	新其它提示
-    setHotelInfo ({ data }) {
+    setHotelInfo (data) {
         const hotelID = Cookie.get('hotelID');
         return http.put(`${URI.HOTEL}/${hotelID}`, data)
             .then(res => {
@@ -144,9 +163,17 @@ const api = {
         return http.get(`${URI.HOTEL}/${hotelID}/menu`)
             .then(res => {
                 const data = res.data;
-                if (data.data && data.data.menu) {
+                if (data.status === 200 && data.data) {
                     Cookie.set('menuID', data.data.id);
-                    return JSON.parse(data.data.menu);
+                    return data.data.menu
+                        ? JSON.parse(data.data.menu)
+                        : {
+                            hot_dishes: [],
+                            cold_dishes: [],
+                            soups: [],
+                            staple_foods: [],
+                            fruits: []
+                        };
                 } else {
                     return Promise.reject(res.data);
                 }

@@ -15,7 +15,7 @@
 </style>
 
 <template>
-    <Card dis-hover>
+    <Card>
         <p slot="title">
             <Icon :type="icon"></Icon>
             {{ title }}
@@ -180,7 +180,7 @@ export default {
                 staple_foods: '主食',
                 fruits: '水果'
             };
-            return map[sort];
+            return map[sort] || '未知主题';
         },
         changeTopic (name = '') {
             this.topic = name;
@@ -400,7 +400,13 @@ export default {
             this.isLoading = true;
             this.ajax('getMenu', payload)
                 .then((data) => {
-                    this.data = data;
+                    this.data = data ? data : {
+                            hot_dishes: [],
+                            cold_dishes: [],
+                            soups: [],
+                            staple_foods: [],
+                            fruits: []
+                        };
                 })
                 .catch((err) => {
                     if (err.logout) {
