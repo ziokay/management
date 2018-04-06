@@ -117,7 +117,7 @@
                     },
                     initStatus: this.status
                 },
-                method: 'getTable'
+                method: 'getOrder'
             };
         },
         computed: {

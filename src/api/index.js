@@ -54,8 +54,9 @@ const api = {
         return http.get(URI.USERINFO)
             .then(res => {
                 const data = res.data.data;
-                if (data) {
+                if (data && data.hotel) {
                     Cookie.set('user', data.phone);
+                    Cookie.set('hotel_id',data.hotel.id);
                     return data;
                 } else {
                     return Promise.reject(res.data);
@@ -169,8 +170,9 @@ const api = {
     /**
      * 饭桌订单
      */
-    // getOrders ({ hotel_id }) {
-    //     return http.get(`${URI.HOTEL}/${hotel_id}/orders`)
+    // getOrders ({ hotelID }) {
+    //     const hotelID=Cookie.get('hotel_id');
+    //     return http.get(`${URI.HOTEL}/${hotelID}/orders`)
     //         .then(res => {
     //             const data = res.data.data;
     //             if (data) {
@@ -184,11 +186,12 @@ const api = {
     //             return Promise.reject(err);
     //         });
     // },
-    getTable ({ hotel_id,index: page, size: per_page, status }) {
+    getOrder ({ hotel_id,index: page, size: per_page, status }) {
+        const hotelID=Cookie.get('hotel_id');
         const config = { params: { hotel_id,page, per_page, status } };
-        return http.get(`${URI.HOTEL}/${hotel_id}/orders`, config) // 默认发送 json
+        return http.get(`${URI.HOTEL}/${hotelID}/orders`, config)  
             .then(res => {
-                const data = res.data.data;
+                const data = res.data;
                 if (data) {
                     return {
                         total: data.total,
@@ -203,10 +206,11 @@ const api = {
                 return Promise.reject(err);
             });
     },
-    // setOrder ({ id, finish}){
-    //     const config = {params:{status: finish===1?1:0}};
-    //     return http.put(`${URL_}`)
-    // }
+    setOrder ({ id, finish}){
+        const order=Cookie.get('id');
+        const config = {params:{status: finish===1?1:0}};
+        return http.post(`${URL.ORDER}/${order}/agree`,finish)
+    }
 };
 
 export default (method, payload) => method ? api[method](payload) : api;
