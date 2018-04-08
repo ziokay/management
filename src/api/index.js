@@ -216,12 +216,12 @@ const api = {
                 }
             })
             .catch(err => {
-                console.log('getTable error: ', err.message);
+                console.log('getOrders error: ', err.message);
                 return Promise.reject(err);
             });
     },
     setOrder ({ id, finish}){
-        const order=Cookie.get('id');
+        const order=Cookie.get('hotelID');
         const config = {params:{status: finish===1?1:0}};
         return http.post(`${URL.ORDER}/${order}/agree`,finish)
     }
