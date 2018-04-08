@@ -65,16 +65,11 @@ const api = {
         return http.get(URI.USERINFO)
             .then(res => {
                 const data = res.data.data;
-<<<<<<< HEAD
-                if (data && data.hotel) {
-                    Cookie.set('user', data.phone);
-=======
                 if (data && data.name) {
                     Cookie.set('user', data.name);
                     if (data.hotel) {
                         Cookie.set('hotelID', data.hotel.id);
                     }
->>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
                     return data;
                 } else {
                     return Promise.reject(res.data);
