@@ -54,11 +54,17 @@ const api = {
         return http.get(URI.USERINFO)
             .then(res => {
                 const data = res.data.data;
+<<<<<<< HEAD
                 if (data && data.name) {
                     Cookie.set('user', data.name);
                     if (data.hotel) {
                         Cookie.set('hotelID', data.hotel.id);
                     }
+=======
+                if (data && data.hotel) {
+                    Cookie.set('user', data.phone);
+                    Cookie.set('hotel_id',data.hotel.id);
+>>>>>>> master
                     return data;
                 } else {
                     return Promise.reject(res.data);
@@ -205,20 +211,25 @@ const api = {
         const hotelID = Cookie.get('hotelID');
         return http.get(`${URI.HOTEL}/${hotelID}/orders`)
             .then(res => {
-                const data = res.data.data;
+                const data = res.data;
                 if (data) {
-                    return data;
+                    return {
+                        total: data.total,
+                        data
+                    };
                 } else {
                     return Promise.reject(res.data);
                 }
             })
             .catch(err => {
-                console.log('err getOrders', err.message);
+                console.log('getTable error: ', err.message);
                 return Promise.reject(err);
             });
     },
-    passOrder({finish}){
-        return http.post()
+    setOrder ({ id, finish}){
+        const order=Cookie.get('id');
+        const config = {params:{status: finish===1?1:0}};
+        return http.post(`${URL.ORDER}/${order}/agree`,finish)
     }
 };
 
