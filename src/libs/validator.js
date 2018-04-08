@@ -63,8 +63,8 @@ function validator (page, newPassRef) {
                 trigger: 'blur'
             },
             {
-                min: 3,
-                message: '请至少输入3个字符',
+                min: 2,
+                message: '请至少输入2个字符',
                 trigger: 'blur'
             },
             {

@@ -39,17 +39,10 @@
 </template>
 
 <script>
-const validateMobile = (rule, value, callback) => {
-    if(!Number.isInteger(+value)) {
-        callback(new Error('请输入手机号'));
-    } else if(value.length==11){
-        callback();
-    }else{
-        callback(new Error('请输入正确的手机号'))
-    }  
-  }
+import validator from '@/libs/validator';
 export default {
     data () {
+        const { validate } = validator(this, "newPass");
         return {
             form: {
                 phone: '',
@@ -57,8 +50,8 @@ export default {
             },  
             rules: {
                 phone: [
-                    { required: true, message: '账号不能为空', trigger: 'blur' },
-                    {validator: validateMobile, trigger: 'blur'}
+                    { validator: validate, trigger: 'blur' },
+                    { required: true, message: '账号不能为空', trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '密码不能为空', trigger: 'blur' },
@@ -77,7 +70,7 @@ export default {
                         content: '登录中......',
                         duration: 0
                     });
-                    this.ajax('login',this.form)
+                    this.ajax('login', this.form)
                         .then(data => {
                             return this.ajax('getUserInfo');
                         })
@@ -107,12 +100,7 @@ export default {
                         });
                 }
             });
-        },
-        // toSignupPage () {
-        //     this.$router.push({
-        //         name: 'signup'
-        //     });
-        // }
+        }
     }
 };
 </script>

@@ -24,7 +24,7 @@ http.interceptors.request.use(
 http.interceptors.response.use(
     res => {
         const data = res.data;
-        if (data.status === 401 && /JWT/g.test(data.message)) {
+        if (data.status === 401 && /token/g.test(data.message)) {
             const logoutError = {
                 logout: true,
                 message: 'token过期'
@@ -65,8 +65,16 @@ const api = {
         return http.get(URI.USERINFO)
             .then(res => {
                 const data = res.data.data;
+<<<<<<< HEAD
                 if (data && data.hotel) {
                     Cookie.set('user', data.phone);
+=======
+                if (data && data.name) {
+                    Cookie.set('user', data.name);
+                    if (data.hotel) {
+                        Cookie.set('hotelID', data.hotel.id);
+                    }
+>>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
                     return data;
                 } else {
                     return Promise.reject(res.data);
@@ -74,6 +82,22 @@ const api = {
             })
             .catch(err => {
                 console.log('err getUserInfo', err.message);
+                return Promise.reject(err);
+            });
+    },
+    setUserInfo (data) {
+        return http.patch(URI.NEW_USERINFO, data)
+            .then(res => {
+                const data = res.data.data;
+                if (data && data.name) {
+                    Cookie.set('user', data.name);
+                    return data;
+                } else {
+                    return Promise.reject(res.data);
+                }
+            })
+            .catch(err => {
+                console.log('err setUserInfo', err.message);
                 return Promise.reject(err);
             });
     },
@@ -92,6 +116,7 @@ const api = {
             .then(res => {
                 const data = res.data;
                 if (data.status === 201 && data.data) {
+                    Cookie.set('hotelID', data.data.id);
                     return data.data;
                 } else {
                     return Promise.reject(data);
@@ -105,14 +130,20 @@ const api = {
     /**
      * 商家信息
      */
+<<<<<<< HEAD
     getHotelInfo({
         hotel_id
     }) {
         return http.get(`${URI.HOTEL}/${hotel_id}`)
+=======
+    getHotelInfo () {
+        const hotelID = Cookie.get('hotelID');
+        return http.get(`${URI.HOTEL}/${hotelID}`)
+>>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
             .then(res => {
-                const data = res.data.data.data;
-                if (data) {
-                    return data;
+                const data = res.data;
+                if (data && data.data) {
+                    return data.data;
                 } else {
                     return Promise.reject(res.data);
                 }
@@ -131,14 +162,20 @@ const api = {
     // price 	string 	是 	新店铺价格 	999
     // type 	number 	是 	新店铺类型 	0
     // other 	string 	是 	新其它提示
+<<<<<<< HEAD
     setHotelInfo({
         hotel_id,
         data
     }) {
         return http.put(`${URI.HOTEL}/${hotel_id}`, data)
+=======
+    setHotelInfo (data) {
+        const hotelID = Cookie.get('hotelID');
+        return http.put(`${URI.HOTEL}/${hotelID}`, data)
+>>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
             .then(res => {
-                const data = res.data.data;
-                if (data.status === 201 && data.data) {
+                const data = res.data;
+                if (data && data.data) {
                     return data.data;
                 } else {
                     return Promise.reject(res.data);
@@ -152,14 +189,29 @@ const api = {
     /**
      * 菜单发布
      */
+<<<<<<< HEAD
     getMenu({
         hotel_id
     }) {
         return http.get(`${URI.HOTEL}/${hotel_id}/menu`)
+=======
+    getMenu () {
+        const hotelID = Cookie.get('hotelID');
+        return http.get(`${URI.HOTEL}/${hotelID}/menu`)
+>>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
             .then(res => {
                 const data = res.data;
-                if (data.status === 201 && data.data) {
-                    return data.data;
+                if (data.status === 200 && data.data) {
+                    Cookie.set('menuID', data.data.id);
+                    return data.data.menu
+                        ? JSON.parse(data.data.menu)
+                        : {
+                            hot_dishes: [],
+                            cold_dishes: [],
+                            soups: [],
+                            staple_foods: [],
+                            fruits: []
+                        };
                 } else {
                     return Promise.reject(res.data);
                 }
@@ -169,6 +221,7 @@ const api = {
                 return Promise.reject(err);
             });
     },
+<<<<<<< HEAD
     setMenu({
         menu_id,
         menu
@@ -176,10 +229,14 @@ const api = {
         return http.put(`/menus/${menu_id}`, {
                 menu
             })
+=======
+    setMenu ({ menuID, menu }) {
+        return http.put(`/menus/${menuID}`, { menu })
+>>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
             .then(res => {
                 const data = res.data;
-                if (data.status === 201 && data.data) {
-                    return data.data;
+                if (data.data && data.data.menu) {
+                    return JSON.parse(data.data.menu);
                 } else {
                     return Promise.reject(res.data);
                 }
@@ -192,6 +249,7 @@ const api = {
     /**
      * 饭桌订单
      */
+<<<<<<< HEAD
     // getOrders ({ hotelID }) {
     //     const hotelID=Cookie.get('hotel_id');
     //     return http.get(`${URI.HOTEL}/${hotelID}/orders`)
@@ -224,6 +282,11 @@ const api = {
             }
         };
         return http.get(`${URI.HOTEL}/${hotelID}/orders`, config)
+=======
+    getOrders () {
+        const hotelID = Cookie.get('hotelID');
+        return http.get(`${URI.HOTEL}/${hotelID}/orders`)
+>>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
             .then(res => {
                 const data = res.data;
                 if (data) {
@@ -236,12 +299,21 @@ const api = {
                 }
             })
             .catch(err => {
+<<<<<<< HEAD
                 console.log('getOrder error: ', err.message);
                 return Promise.reject(err);
             });
     },
     setOrder ({ order_id, status}){
         const order=Cookie.get('order_id');
+=======
+                console.log('getOrders error: ', err.message);
+                return Promise.reject(err);
+            });
+    },
+    setOrder ({ id, finish}){
+        const order=Cookie.get('hotelID');
+>>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
         const config = {params:{status: finish===1?1:0}};
         return http.post(`${URL.ORDER}/${order}/agree`,config)
             .then(res => {

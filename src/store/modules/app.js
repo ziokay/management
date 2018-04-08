@@ -184,7 +184,7 @@ const app = {
             state.messageCount = count;
         },
         increateTag (state, tagObj) {
-            if (!Util.oneOf(tagObj.name, state.dontCache)) {
+            if (!Util.oneOf(tagObj.name, state.dontCache) && !state.cachePage.includes(tagObj.name)) {
                 state.cachePage.push(tagObj.name);
                 localStorage.cachePage = JSON.stringify(state.cachePage);
             }

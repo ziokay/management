@@ -5,7 +5,8 @@ const user = {
     mutations: {
         logout (state, vm) {
             Cookies.remove('user');
-            Cookies.remove('password');
+            Cookies.remove('hotelID');
+            Cookies.remove('menuID');
             Cookies.remove('access');
             // 恢复默认样式
             let themeLink = document.querySelector('link[name="theme"]');
