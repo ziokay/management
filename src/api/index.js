@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { CONFIG, URI } from './config.js';
+import {
+    CONFIG,
+    URI
+} from './config.js';
 import Cookie from 'js-cookie';
 
 const http = axios.create(CONFIG);
@@ -8,7 +11,9 @@ http.interceptors.request.use(
     config => {
         const token = Cookie.get('token');
         if (token) { // 如果存在 token，每个 request 都加上 token
-            config.params = { token };
+            config.params = {
+                token
+            };
         }
         return config;
     },
@@ -33,8 +38,14 @@ http.interceptors.response.use(
     });
 
 const api = {
-    login ({ phone, password }) {
-        const data = { phone, password };
+    login({
+        phone,
+        password
+    }) {
+        const data = {
+            phone,
+            password
+        };
         return http.post(URI.LOGIN, data) // 默认发送 json
             .then(res => {
                 const data = res.data.data;
@@ -50,13 +61,12 @@ const api = {
                 return Promise.reject(err);
             });
     },
-    getUserInfo () {
+    getUserInfo() {
         return http.get(URI.USERINFO)
             .then(res => {
                 const data = res.data.data;
                 if (data && data.hotel) {
                     Cookie.set('user', data.phone);
-                    Cookie.set('hotel_id',data.hotel.id);
                     return data;
                 } else {
                     return Promise.reject(res.data);
@@ -77,7 +87,7 @@ const api = {
     // type 	number 	是 	店铺类型 	0
     // other 	string 	是 	其它提示 	其它提示
     // doc 	file 	否 	上传资料压缩包(可选),后缀名必须为zip
-    signup (data) {
+    signup(data) {
         return http.post(URI.HOTEL, data)
             .then(res => {
                 const data = res.data;
@@ -95,7 +105,9 @@ const api = {
     /**
      * 商家信息
      */
-    getHotelInfo ({ hotel_id }) {
+    getHotelInfo({
+        hotel_id
+    }) {
         return http.get(`${URI.HOTEL}/${hotel_id}`)
             .then(res => {
                 const data = res.data.data.data;
@@ -119,7 +131,10 @@ const api = {
     // price 	string 	是 	新店铺价格 	999
     // type 	number 	是 	新店铺类型 	0
     // other 	string 	是 	新其它提示
-    setHotelInfo ({ hotel_id, data }) {
+    setHotelInfo({
+        hotel_id,
+        data
+    }) {
         return http.put(`${URI.HOTEL}/${hotel_id}`, data)
             .then(res => {
                 const data = res.data.data;
@@ -137,7 +152,9 @@ const api = {
     /**
      * 菜单发布
      */
-    getMenu ({ hotel_id }) {
+    getMenu({
+        hotel_id
+    }) {
         return http.get(`${URI.HOTEL}/${hotel_id}/menu`)
             .then(res => {
                 const data = res.data;
@@ -152,8 +169,13 @@ const api = {
                 return Promise.reject(err);
             });
     },
-    setMenu ({ menu_id, menu }) {
-        return http.put(`/menus/${menu_id}`, { menu })
+    setMenu({
+        menu_id,
+        menu
+    }) {
+        return http.put(`/menus/${menu_id}`, {
+                menu
+            })
             .then(res => {
                 const data = res.data;
                 if (data.status === 201 && data.data) {
@@ -186,10 +208,22 @@ const api = {
     //             return Promise.reject(err);
     //         });
     // },
-    getOrder ({ hotel_id,index: page, size: per_page, status }) {
-        const hotelID=Cookie.get('hotel_id');
-        const config = { params: { hotel_id,page, per_page, status } };
-        return http.get(`${URI.HOTEL}/${hotelID}/orders`, config)  
+    getOrder({
+        hotel_id,
+        index: page,
+        size: per_page,
+        status
+    }) {
+        const hotelID = Cookie.get('hotel_id');
+        const config = {
+            params: {
+                hotel_id,
+                page,
+                per_page,
+                status,
+            }
+        };
+        return http.get(`${URI.HOTEL}/${hotelID}/orders`, config)
             .then(res => {
                 const data = res.data;
                 if (data) {
@@ -202,14 +236,26 @@ const api = {
                 }
             })
             .catch(err => {
-                console.log('getTable error: ', err.message);
+                console.log('getOrder error: ', err.message);
                 return Promise.reject(err);
             });
     },
-    setOrder ({ id, finish}){
-        const order=Cookie.get('id');
+    setOrder ({ order_id, status}){
+        const order=Cookie.get('order_id');
         const config = {params:{status: finish===1?1:0}};
-        return http.post(`${URL.ORDER}/${order}/agree`,finish)
+        return http.post(`${URL.ORDER}/${order}/agree`,config)
+            .then(res => {
+                const data = res.data;
+                if (data.status === 201 && data.data) {
+                    return data.data;
+                } else {
+                    return Promise.reject(data);
+                }
+            })
+            .catch(err => {
+                console.log('err setOrder', err.message);
+                return Promise.reject(err);
+            });
     }
 };
 

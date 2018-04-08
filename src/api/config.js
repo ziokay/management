@@ -12,7 +12,7 @@ export const CONFIG = {
         'X-Requested-With': 'XMLHttpRequest'
     },
     withCredentials: true,
-    timeout: 7000
+    timeout: 7000,
 };
 
 export const URI = {
