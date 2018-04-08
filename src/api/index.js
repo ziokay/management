@@ -54,17 +54,11 @@ const api = {
         return http.get(URI.USERINFO)
             .then(res => {
                 const data = res.data.data;
-<<<<<<< HEAD
                 if (data && data.name) {
                     Cookie.set('user', data.name);
                     if (data.hotel) {
                         Cookie.set('hotelID', data.hotel.id);
                     }
-=======
-                if (data && data.hotel) {
-                    Cookie.set('user', data.phone);
-                    Cookie.set('hotel_id',data.hotel.id);
->>>>>>> master
                     return data;
                 } else {
                     return Promise.reject(res.data);
