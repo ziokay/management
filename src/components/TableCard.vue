@@ -9,11 +9,6 @@
         </p>
         <Row type="flex" justify="center" align="bottom">
             <Col span="18">
-                <Checkbox-group v-model="checked" style="margin-bottom: 6px;">
-                    <template v-for="(value, key) in columns">
-                        <Checkbox :label="key" :key="key">{{ value.title }}</Checkbox>
-                    </template>
-                </Checkbox-group>
             </Col>
             <Col span="6">
                 <div style="margin: 0 10px 10px 0; float: right;">

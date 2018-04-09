@@ -125,16 +125,9 @@ const api = {
     /**
      * 商家信息
      */
-<<<<<<< HEAD
-    getHotelInfo({
-        hotel_id
-    }) {
-        return http.get(`${URI.HOTEL}/${hotel_id}`)
-=======
     getHotelInfo () {
         const hotelID = Cookie.get('hotelID');
         return http.get(`${URI.HOTEL}/${hotelID}`)
->>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
             .then(res => {
                 const data = res.data;
                 if (data && data.data) {
@@ -157,17 +150,9 @@ const api = {
     // price 	string 	是 	新店铺价格 	999
     // type 	number 	是 	新店铺类型 	0
     // other 	string 	是 	新其它提示
-<<<<<<< HEAD
-    setHotelInfo({
-        hotel_id,
-        data
-    }) {
-        return http.put(`${URI.HOTEL}/${hotel_id}`, data)
-=======
     setHotelInfo (data) {
         const hotelID = Cookie.get('hotelID');
         return http.put(`${URI.HOTEL}/${hotelID}`, data)
->>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
             .then(res => {
                 const data = res.data;
                 if (data && data.data) {
@@ -184,16 +169,9 @@ const api = {
     /**
      * 菜单发布
      */
-<<<<<<< HEAD
-    getMenu({
-        hotel_id
-    }) {
-        return http.get(`${URI.HOTEL}/${hotel_id}/menu`)
-=======
     getMenu () {
         const hotelID = Cookie.get('hotelID');
         return http.get(`${URI.HOTEL}/${hotelID}/menu`)
->>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
             .then(res => {
                 const data = res.data;
                 if (data.status === 200 && data.data) {
@@ -216,18 +194,8 @@ const api = {
                 return Promise.reject(err);
             });
     },
-<<<<<<< HEAD
-    setMenu({
-        menu_id,
-        menu
-    }) {
-        return http.put(`/menus/${menu_id}`, {
-                menu
-            })
-=======
     setMenu ({ menuID, menu }) {
         return http.put(`/menus/${menuID}`, { menu })
->>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
             .then(res => {
                 const data = res.data;
                 if (data.data && data.data.menu) {
@@ -244,44 +212,20 @@ const api = {
     /**
      * 饭桌订单
      */
-<<<<<<< HEAD
-    // getOrders ({ hotelID }) {
-    //     const hotelID=Cookie.get('hotel_id');
-    //     return http.get(`${URI.HOTEL}/${hotelID}/orders`)
-    //         .then(res => {
-    //             const data = res.data.data;
-    //             if (data) {
-    //                 return data;
-    //             } else {
-    //                 return Promise.reject(res.data);
-    //             }
-    //         })
-    //         .catch(err => {
-    //             console.log('err getOrders', err.message);
-    //             return Promise.reject(err);
-    //         });
-    // },
     getOrder({
-        hotel_id,
         index: page,
         size: per_page,
         status
     }) {
-        const hotelID = Cookie.get('hotel_id');
+        const hotelID = Cookie.get('hotelID');
         const config = {
             params: {
-                hotel_id,
                 page,
                 per_page,
                 status,
             }
         };
         return http.get(`${URI.HOTEL}/${hotelID}/orders`, config)
-=======
-    getOrders () {
-        const hotelID = Cookie.get('hotelID');
-        return http.get(`${URI.HOTEL}/${hotelID}/orders`)
->>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
             .then(res => {
                 const data = res.data;
                 if (data) {
@@ -294,21 +238,12 @@ const api = {
                 }
             })
             .catch(err => {
-<<<<<<< HEAD
                 console.log('getOrder error: ', err.message);
                 return Promise.reject(err);
             });
     },
     setOrder ({ order_id, status}){
         const order=Cookie.get('order_id');
-=======
-                console.log('getOrders error: ', err.message);
-                return Promise.reject(err);
-            });
-    },
-    setOrder ({ id, finish}){
-        const order=Cookie.get('hotelID');
->>>>>>> cffff7450d965434e1b8557c41da0d9a40578cf5
         const config = {params:{status: finish===1?1:0}};
         return http.post(`${URL.ORDER}/${order}/agree`,config)
             .then(res => {
