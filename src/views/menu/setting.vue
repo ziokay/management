@@ -21,7 +21,7 @@
             {{ title }}
         </p>
         <Row>
-            <Col :xs="24" :sm="24" :lg="14" style="margin-bottom: 15px;">
+            <Col :xs="24" :sm="24" :lg="14" style="margin-bottom: 15px;" >
                 <Card>
                     <p slot="title">{{ getName(topic) || '主题' }}</p>
                     <div slot="extra">
@@ -136,6 +136,7 @@ export default {
             targetKeys: [],
             listStyle: {
                 width: '41%',
+                // fontSize:'20px',
                 height: '500px',
                 marginBottom: '15px',
                 // 'text-align': 'left',

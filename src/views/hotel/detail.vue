@@ -28,12 +28,12 @@
                         <FormItem label="店铺价格" prop="price">
                             <Input v-model="form.price" placeholder="请输入店铺价格"></Input>
                         </FormItem>
-                        <FormItem label="店铺经度" prop="lng">
+                        <!-- <FormItem label="店铺经度" prop="lng">
                             <Input v-model="form.lng" placeholder="请输入店铺经度"></Input>
                         </FormItem>
                         <FormItem label="店铺纬度" prop="lat">
                             <Input v-model="form.lat" placeholder="请输入店铺维度"></Input>
-                        </FormItem>
+                        </FormItem> -->
                         <FormItem label="店铺类型">
                             <i-switch v-model="form.type" size="large" :true-value="1" :false-value="0">
                                 <span slot="open">1</span>

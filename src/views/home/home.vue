@@ -173,7 +173,7 @@
             </Card>
         </Row>
     </div> -->
-    <Col :md="20" :lg="6" :style="{marginBottom: '10px'}">
+    <!-- <Col :md="20" :lg="6" :style="{marginBottom: '10px'}">
     <Card>
         <p slot="title" class="card-title">
             <Icon type="android-checkbox-outline"></Icon>
@@ -201,7 +201,7 @@
             </div>
         </div>
     </Card>
-</Col>
+</Col> -->
     
 </template>
 
@@ -215,7 +215,6 @@
 // import countUp from './components/countUp.vue';
 // import inforCard from './components/inforCard.vue';
 // import mapDataTable from './components/mapDataTable.vue';
-import toDoListItem from './components/toDoListItem.vue';
 
 export default {
     name: 'home',
@@ -228,18 +227,18 @@ export default {
 //         countUp,
 //         inforCard,
 //         mapDataTable,
-        toDoListItem
+        // toDoListItem
     },
-    data () {
-        return {
-            toDoList: [
-                {
-                    title: '热菜'
-                },
-                {
-                    title: '热菜'
-                }
-            ],
+    // data () {
+    //     return {
+    //         toDoList: [
+    //             {
+    //                 title: '热菜'
+    //             },
+    //             {
+    //                 title: '热菜'
+    //             }
+    //         ],
 //             count: {
 //                 createUser: 496,
 //                 visit: 3264,
@@ -247,36 +246,36 @@ export default {
 //                 transfer: 39503498
 //             },
 //             cityData: cityData,
-            showAddNewTodo: false,
-            newToDoItemValue: ''
-        };
-    },
+            // showAddNewTodo: false,
+            // newToDoItemValue: ''
+        // };
+    // },
 //     computed: {
 //         avatorPath () {
 //             return localStorage.avatorImgPath;
 //         }
 //     },
     methods: {
-        addNewToDoItem () {
-            this.showAddNewTodo = true;
-        },
-        addNew () {
-            if (this.newToDoItemValue.length !== 0) {
-                this.toDoList.unshift({
-                    title: this.newToDoItemVale
-                });
-                setTimeout(() => {
-                    this.newToDoItemValue = '';
-                }, 200);
-                this.showAddNewTodo = false;
-            } else {
-                this.$Message.error('请输入待办事项内容');
-            }
-        },
-        cancelAdd () {
-            this.showAddNewTodo = false;
-            this.newToDoItemValue = '';
-        }
+    //     addNewToDoItem () {
+    //         this.showAddNewTodo = true;
+    //     },
+    //     addNew () {
+    //         if (this.newToDoItemValue.length !== 0) {
+    //             this.toDoList.unshift({
+    //                 title: this.newToDoItemVale
+    //             });
+    //             setTimeout(() => {
+    //                 this.newToDoItemValue = '';
+    //             }, 200);
+    //             this.showAddNewTodo = false;
+    //         } else {
+    //             this.$Message.error('请输入待办事项内容');
+    //         }
+    //     },
+    //     cancelAdd () {
+    //         this.showAddNewTodo = false;
+    //         this.newToDoItemValue = '';
+    //     }
     }
 };
 </script>
