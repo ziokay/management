@@ -223,6 +223,9 @@ const api = {
                 page,
                 per_page,
                 status,
+            },
+            validateStatus: function (status) {
+                return status < 500; // Reject only if the status code is greater than or equal to 500
             }
         };
         return http.get(`${URI.HOTEL}/${hotelID}/orders`, config)
@@ -238,6 +241,9 @@ const api = {
                 }
             })
             .catch(err => {
+                if (err.response.status === 404) {
+                    return Promise.resolve(err);
+                }
                 console.log('getOrder error: ', err.message);
                 return Promise.reject(err);
             });
