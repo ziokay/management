@@ -224,16 +224,16 @@ const api = {
                 per_page,
                 status,
             },
-            // validateStatus: function (status) {
-            //     return status < 500; // Reject only if the status code is greater than or equal to 500
-            // }
+            validateStatus: function (status) {
+                return status < 500;
+            }
         };
         return http.get(`${URI.HOTEL}/${hotelID}/orders`, config)
             .then(res => {
-                const data = res.data;
-                if (data) {
+                const { data: { data, total } } = res.data;
+                if (data && typeof total !== 'undefined') {
                     return {
-                        total: data.total,
+                        total,
                         data
                     };
                 } else {
@@ -241,9 +241,6 @@ const api = {
                 }
             })
             .catch(err => {
-                if (err.response.status === 404) {
-                    return Promise.resolve(err);
-                }
                 console.log('getOrder error: ', err.message);
                 return Promise.reject(err);
             });
