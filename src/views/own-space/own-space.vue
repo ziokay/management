@@ -1,5 +1,10 @@
 <style lang="less">
     @import './own-space.less';
+
+    .spin-container{
+    	// display: inline-block;
+        position: relative;
+    }
 </style>
 
 <template>
@@ -7,262 +12,226 @@
         <Card>
             <p slot="title">
                 <Icon type="person"></Icon>
-                店铺信息
+                个人信息
             </p>
-            <div>
-                <Form ref="userForm" :model="userForm" :label-width="100" label-position="right" :rules="inforValidate">
+            <div class="spin-container">
+                <Form 
+                    ref="userForm"
+                    :model="userForm" 
+                    :label-width="80" 
+                    label-position="right"
+                    :rules="validate"
+                >
                     <Row>
+                        <Col span="6" offset="6">
+                            <FormItem label="姓名：" prop="name">
+                                <div style="display:inline-block;width:100px;">
+                                    <Input v-model="userForm.name" ></Input>
+                                </div>
+                            </FormItem>
+                        </Col>
                         <Col span="6">
-                        <FormItem label="店铺名称：" prop="name">
-                            <div style="display:inline-block;width:150px;">
-                                <Input v-model="userForm.name"></Input>
-                            </div>
-                        </FormItem>
-                        </Col>
-                        <Col span="6" offset="4">
-                        <FormItem label="店铺地址：" prop="address">
-                            <div style="display:inline-block;width:150px;">
-                                <Input v-model="userForm.address"></Input>
-                            </div>
-                        </FormItem>
+                            <FormItem label="性别：">
+                                <RadioGroup v-model="userForm.gender">
+                                    <Radio :label="0">女</Radio>
+                                    <Radio :label="1">男</Radio>
+                                </RadioGroup>
+                            </FormItem>
                         </Col>
                     </Row>
                     <Row>
+                        <Col span="6" offset="6">
+                            <FormItem label="类型：">
+                                <span>{{ getElderName(userForm.elder) }}</span>
+                            </FormItem>
+                        </Col>
                         <Col span="6">
-                        <FormItem label="适合人群：" prop="people">
-                            <div style="display:inline-block;width:150px;">
-                                <Input v-model="userForm.people"></Input>
-                            </div>
-                        </FormItem>
-                        </Col>
-                        <Col span="6" offset="4">
-                        <FormItem label="店铺价格：" prop="price">
-                            <div style="display:inline-block;width:150px;">
-                                <Input v-model="userForm.price"></Input>
-                            </div>
-                        </FormItem>
+                            <FormItem label="手机号：" prop="phone" >
+                                <div style="display:inline-block;width:170px;">
+                                    <Input v-model="userForm.phone"></Input>
+                                </div>
+                            </FormItem>
                         </Col>
                     </Row>
                     <Row>
+                        <Col span="6" offset="6">
+                            <FormItem label="创建时间：">
+                                <span>{{ userForm.created_at }}</span>
+                            </FormItem>
+                        </Col>
                         <Col span="6">
-                        <FormItem label="店铺类型：" prop="type">
-                            <div style="display:inline-block;width:150px;">
-                                <Input v-model="userForm.type"></Input>
-                            </div>
-                        </FormItem>
-                        </Col>
-                        <Col span="6" offset="4">
-                        <FormItem label="店铺简介：" prop="description">
-                            <div style="display:inline-block;width:250px;">
-                                <Input v-model="userForm.description"></Input>
-                            </div>
-                        </FormItem>
+                            <FormItem label="修改时间：" prop="updated_at">
+                                <span>{{ userForm.updated_at }}</span>
+                            </FormItem>
                         </Col>
                     </Row>
+                    <!-- <Row>
+                        <Col span="6" offset="6">
+                            <FormItem label="登录密码：">
+                                <Button type="text" size="small" @click="showPassModal">修改密码</Button>
+                            </FormItem>
+                        </Col>
+                        <Col span="6">
+                            <FormItem label="邮箱：" prop="email">
+                                <div style="display:inline-block;width:170px;">
+                                    <Input v-model="userForm.email" ></Input>
+                                </div>
+                            </FormItem>
+                        </Col>
+                    </Row> -->
                     <Row>
-                        <FormItem label="其他提示：" prop="other">
-                            <div style="display:inline-block;width:150px;">
-                                <!-- <Upload multiple action="postInfo"
-                                :show-upload-list="true"
-                                :format="['zip']"
-                                :on-format-error="handleFormatError2"
-                                >
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                                    <p>仅支持zip格式文件</p>
-                                </Upload> -->
-
-                                <Upload multiple action="">
-                                    <!-- <span>多选文件上传&nbsp;&nbsp;</span> -->
-                                    <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                                </Upload>
+                        <Col span="6" offset="9">
+                            <div>
+                                <Button type="text" style="width: 100px;" @click="cancelEditUserInfor">取消</Button>
+                                <Button type="primary" style="width: 100px;" :loading="isSaving" @click="saveEdit">保存</Button>
                             </div>
-
-                            <!-- <div class="height-120px">
-                            </div> -->
-
-                        </FormItem>
+                        </Col>
                     </Row>
-                    <div>
-                        <Button type="text" style="width: 100px;" @click="cancelEditUserInfor">取消</Button>
-                        <Button type="primary" style="width: 100px;" :loading="save_loading" @click="saveEdit">保存</Button>
-                    </div>
                 </Form>
+                <Spin size="large" fix v-if="isLoading"></Spin>
             </div>
         </Card>
+        <!-- <Modal v-model="editPassModal" :closable='false' :mask-closable='false' :width="500">
+            <h3 slot="header" style="color:#2D8CF0">修改密码</h3>
+            <Form ref="passForm" :model="passForm" :label-width="100" label-position="right" :rules="validate">
+                <FormItem label="原密码" prop="pass" :error="passError">
+                    <Input type="password" v-model="passForm.pass" placeholder="请输入现在使用的密码" ></Input>
+                </FormItem>
+                <FormItem label="新密码" prop="newPass">
+                    <Input type="password" ref="newPass" v-model="passForm.newPass" placeholder="请输入新密码，至少6位字符" ></Input>
+                </FormItem>
+                <FormItem label="确认新密码" prop="rePass">
+                    <Input type="password" v-model="passForm.rePass" placeholder="请再次输入新密码" ></Input>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="text" @click="closePassModal">取消</Button>
+                <Button type="primary" @click="saveEditPass">保存</Button>
+            </div>
+        </Modal> -->
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'ownspace_index',
-        data() {
-            const validePhone = (rule, value, callback) => {
-                var re = /^1[0-9]{10}$/;
-                if (!re.test(value)) {
-                    callback(new Error('请输入正确格式的手机号'));
-                } else {
-                    callback();
-                }
-            };
-            return {
-                userForm: {
-                    name: '',
-                    address: '',
-                    people: '',
-                    price: '',
-                    type: '',
-                    description: '',
-                },
-                uid: '', // 登录用户的userId
-                phoneHasChanged: false, // 是否编辑了手机
-                save_loading: false,
-                savePassLoading: false,
-                oldPassError: '',
-                // uploadList: [],
-                inforValidate: {
-                    name: [{
-                        required: true,
-                        message: '请输入姓名',
-                        trigger: 'blur'
-                    }],
-                    address: [{
-                        required: true,
-                        message: '店铺地址不能为空',
-                        trigger: 'blur'
-                    }],
-                    people: [{
-                        required: true,
-                        message: '适应人群不能为空',
-                        trigger: 'blur'
-                    }],
-                    price: [{
-                        required: true,
-                        message: '店铺价格不能为空',
-                        trigger: 'blur'
-                    }],
-                    type: [{
-                        required: true,
-                        message: '店铺类型不能为空',
-                        trigger: 'blur'
-                    }],
-                    description: [{
-                        required: true,
-                        message: '店铺简介不能为空',
-                        trigger: 'blur'
-                    }],
-                },
-            };
-        },
-        methods: {
-            cancelEditUserInfor() {
-                this.$store.commit('removeTag', 'ownspace_index');
-                localStorage.pageOpenedList = JSON.stringify(this.$store.state.app.pageOpenedList);
-                let lastPageName = '';
-                if (this.$store.state.app.pageOpenedList.length > 1) {
-                    lastPageName = this.$store.state.app.pageOpenedList[1].name;
-                } else {
-                    lastPageName = this.$store.state.app.pageOpenedList[0].name;
-                }
-                this.$router.push({
-                    name: lastPageName
-                });
+import validator from '@/libs/validator';
+export default {
+    name: 'ownspace',
+    data () {
+        const { validate } = validator(this, "newPass");
+        return {
+            isLoading: true, // 是否正在请求数据
+            isSaving: false, // 是否正在保存，控制按钮加载显示
+            // 个人信息
+            userForm: {
+                id: '',
+                phone: '',
+                avatar: '',
+                name: '',
+                gender: 2,
+                elder: '',
+                created_at: '',
+                updated_at: '',
             },
-            saveEdit() {
-                this.$refs['userForm'].validate((valid) => {
-                    if (valid) {
-                        if (this.phoneHasChanged && this.userForm.cellphone !== this.initPhone) { // 手机号码修改过了而且修改之后的手机号和原来的不一样
-                            if (this.hasGetIdentifyCode) { // 判断是否点了获取验证码
-                                if (this.identifyCodeRight) { // 判断验证码是否正确
-                                    this.saveInfoAjax();
-                                } else {
-                                    this.$Message.error('验证码错误，请重新输入');
-                                }
-                            } else {
-                                this.$Message.warning('请先点击获取验证码');
-                            }
-                        } else {
-                            this.saveInfoAjax();
-                        }
-                    }
-                });
-            },
-            // init() {
-            //     this.userForm.name = 'Lison';
-            //     this.userForm.cellphone = '17712345678';
-            //     this.initPhone = '17712345678';
-            //     this.userForm.company = 'TalkingData';
-            //     this.userForm.department = '可视化部门';
-            // },
-
-
-
-
-
-            //     handleFormatError (file) {
-            //     this.$Notice.warning({
-            //         title: '文件格式不正确',
-            //         desc: '文件 ' + file.name + ' 格式不正确，请选择图片文件。'
-            //     });
-            // },
-            // handleBeforeUpload (file) {
-            //     this.$Notice.warning({
-            //         title: '文件准备上传',
-            //         desc: '文件 ' + file.name + ' 准备上传。'
-            //     });
-            // },
-            // handleProgress (event, file) {
-            //     this.$Notice.info({
-            //         title: '文件正在上传',
-            //         desc: '文件 ' + file.name + ' 正在上传。'
-            //     });
-            // },
-            // handleSuccess (evnet, file) {
-            //     this.$Notice.success({
-            //         title: '文件上传成功',
-            //         desc: '文件 ' + file.name + ' 上传成功。'
-            //     });
-            // },
-            // handleError (event, file) {
-            //     this.$Notice.error({
-            //         title: '文件上传成功',
-            //         desc: '文件 ' + file.name + ' 上传失败。'
-            //     });
-            // },
-            // handleView (name) {
-            //     this.imgName = name;
-            //     this.visible = true;
-            // },
-            handleRemove(file) {
-                // 从 upload 实例删除数据
-                const fileList = this.$refs.upload.fileList;
-                this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-            },
-            // handleSuccess2 (res, file) {
-            //     // 因为上传过程为实例，这里模拟添加 url
-            //     file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-            //     file.name = '7eb99afb9d5f317c912f08b5212fd69a';
-            // },
-            handleFormatError2(file) {
-                this.$Notice.warning({
-                    title: '文件格式不正确',
-                    desc: '文件 ' + file.name + ' 格式不正确，请上传 zip 格式的文件。'
-                });
-                // return check;  
+            // 信息验证相关
+            validate,
+            // 修改密码相关 password 此处简称为 pass
+            // passError: '',
+            // editPassModal: false, // 修改密码模态框显示
+            // passForm: {
+            //     pass: '',
+            //     newPass: '',
+            //     rePass: ''
+            // }
+        };
+    },
+    methods: {
+        getElderName (elder) {
+            switch (elder) {
+                case 0:
+                    return '儿女';
+                case 1:
+                    return '长者';
             }
         },
-        mounted() {
-            // this.uploadList = this.$refs.upload.fileList;
+        // 密码模态框相关
+        showPassModal () {
+            this.editPassModal = true;
         },
-        created() {
-            // this.ajax()
-            //     .getInfo()
-            //     .catch((err) => {
-            //         this.$Message.error('数据请求失败');
-            //     })
-            //     .then((data) => {
-            //         this.userForm = data;
-            //         // this.isLoading = false;
-            //     });
+        closePassModal () {
+            this.editPassModal = false;
+        },
+        saveEditPass () {
+            this.$refs['passForm'].validate((valid) => {
+                if (valid) {
+                    this.saveInfo('setPass', this.passForm);
+                    this.closePassModal();
+                    this.$refs['passForm'].resetFields();
+                }
+            });
+        },
+        // 取消与保存事件
+        cancelEditUserInfor () {
+            this.$store.commit('removeTag', 'ownspace');
+            localStorage.pageOpenedList = JSON.stringify(this.$store.state.app.pageOpenedList);
+            let lastPageName = '';
+            if (this.$store.state.app.pageOpenedList.length > 1) {
+                // 原模板的问题：路径跳转不是跳转到上一级
+                // lastPageName = this.$store.state.app.pageOpenedList[1].name;
+                const len = this.$store.state.app.pageOpenedList.length;
+                lastPageName = this.$store.state.app.pageOpenedList[len - 1].name;
+            } else {
+                lastPageName = this.$store.state.app.pageOpenedList[0].name;
+            }
+            this.$router.push({
+                name: lastPageName
+            });
+        },
+        saveEdit () {
+            this.$refs['userForm'].validate((valid) => {
+                if (valid) {
+                    this.saveInfo('setUserInfo', this.userForm);
+                }
+            });
+        },
+        saveInfo (method, payload) {
+            this.isSaving = true;
+            this.$Message.loading({
+                content: '保存中......',
+                duration: 0
+            });
+            return this.ajax(method, payload)
+                        .then(() => {
+                            this.$Message.destroy();
+                            this.$Message.success('保存成功');
+                            this.isSaving = false;
+                        })
+                        .catch(() => {
+                            this.$Message.destroy();
+                            if (err.logout) {
+                                this.$Message.error('用户登录有效期已失效，请重新登录');
+                                // 退出登录状态
+                                this.$store.commit('logout', this);
+                                this.$store.commit('clearOpenedSubmenu');
+                                this.$router.push({
+                                    name: 'login'
+                                });
+                            } else {
+                                this.$Message.error('保存失败');
+                            }
+                            this.isSaving = false;
+                        });
         }
+    },
+    // 请求数据
+    created () {
+        this.ajax('getUserInfo')
+            .then((data) => {
+                this.userForm = data;
+                this.isLoading = false;
+            })
+            .catch((err) => {
+                this.$Message.error('数据请求失败');
+            });
     }
+};
 </script>

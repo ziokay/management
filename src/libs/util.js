@@ -251,5 +251,12 @@ util.fullscreenEvent = function (vm) {
     // 全屏相关
 };
 
+util.isObject = function (val) {
+    return val !== null && typeof val === 'object';
+};
+
+util.isString = function (val) {
+    return typeof val === 'string';
+};
 
 export default util;

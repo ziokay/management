@@ -12,12 +12,13 @@ export const CONFIG = {
         'X-Requested-With': 'XMLHttpRequest'
     },
     withCredentials: true,
-    timeout: 7000
+    timeout: 7000,
 };
 
 export const URI = {
     LOGIN: '/users/login', // 登录
     USERINFO: '/users/show', // 用户信息
+    NEW_USERINFO: '/users/update',
     HOTEL: '/hotels', // 店铺
     // MENU: '/menus'
     ORDER: '/orders' // 订单

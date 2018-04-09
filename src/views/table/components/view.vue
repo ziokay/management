@@ -123,7 +123,7 @@
         computed: {
             form(){
                 return{
-                    id: this.data.data.id,
+                    order_id: this.data.data.id,
                     status: this.data.data.finish
                 }
             }
@@ -135,7 +135,6 @@
                     .then((data) => {
                         this.$Message.destroy();
                         this.$Message.success('审核成功');
-                        this.data.data.finish = this.result;
                     })
                     .catch((err) => {
                         this.$Message.destroy();
@@ -144,10 +143,7 @@
             },
             fetchData(payload) {
                 this.ajax(this.method, payload)
-                    .then(({
-                        data,
-                        total
-                    }) => {
+                    .then(({data,total}) => {
                         this.props.data = data;
                         this.props.total = total;
                     })

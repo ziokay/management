@@ -15,6 +15,7 @@ Vue.use(iView);
 
 Vue.prototype.ajax = http;
 
+
 new Vue({
     el: '#app',
     router: router,

@@ -31,7 +31,7 @@
                 </div>
                 <div class="header-avator-con">
                     <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
-                    <lock-screen></lock-screen>
+                    <!-- <lock-screen></lock-screen> -->
                     <theme-switch></theme-switch>
                     
                     <div class="user-dropdown-menu-con">
@@ -132,9 +132,9 @@
             },
             handleClickUserDropdown (name) {
                 if (name === 'ownSpace') {
-                    util.openNewPage(this, 'ownspace_index');
+                    util.openNewPage(this, 'ownspace');
                     this.$router.push({
-                        name: 'ownspace_index'
+                        name: 'ownspace'
                     });
                 } else if (name === 'loginout') {
                     // 退出登录

@@ -70,7 +70,7 @@ export const otherRouter = {
         {
             path: 'ownspace',
             title: '个人中心',
-            name: 'ownspace_index',
+            name: 'ownspace',
             component: () => import('@/views/own-space/own-space.vue')
         },
     ]
@@ -102,9 +102,9 @@ export const appRouter = [
         children: [
             {
                 path: 'detail',
-                name: 'menu-detail',
+                name: 'menu-setting',
                 title: '菜单发布',
-                component: () => import('@/views/menu/detail.vue')
+                component: () => import('@/views/menu/setting.vue')
             }
         ]
     },
