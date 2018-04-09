@@ -6,15 +6,19 @@
     <Row class="to-do-list-item">
         <Col span="2" class="height-100">
             <Row type="flex" justify="center" align="middle" class="height-100">
-                <!-- <Checkbox v-model="todoitem"></Checkbox> -->
+                <Checkbox v-model="todoitem"></Checkbox>
             </Row>
         </Col>
         <Col span="22" class="height-100">
             <Row type="flex" justify="start" align="middle" class="height-100">
-                <p class="to-do-list-item-text" :class="{hasDid: todoitem}" style="margin-right: 10px;">{{ content }}</p>
-                <Button type="error" @click="handleHasDid">删除</Button>
+                <p class="to-do-list-item-text" @click="handleHasDid" :class="{hasDid: todoitem}">{{ content }}</p>
             </Row>
         </Col>
+        <!-- <Col span="4" class="height-100">
+            <Row type="flex" justify="center" align="middle" class="infor-icon-row height-100">
+                <Icon @click.native="showItemInfor" type="information-circled" size="20"></Icon>
+            </Row>
+        </Col> -->
     </Row>
 </template>
 
@@ -32,8 +36,7 @@ export default {
     methods: {
         handleHasDid () {
             this.todoitem = !this.todoitem;
-        },
-
+        }
     }
 };
 </script>

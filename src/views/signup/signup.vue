@@ -166,7 +166,11 @@ export default {
               .then(data => {
                 this.$Message.destroy();
                 this.$Message.success('注册成功！');
-                this.$router.push('/home');
+                localStorage.avatorImgPath = data.avatar;
+                this.$router.push({
+                    name: 'home_index',
+                    params: data
+                });
                 this.isSaving = false;
               })
               .catch(err => {

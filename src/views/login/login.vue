@@ -78,6 +78,7 @@ export default {
                             this.$Message.destroy();
                             this.$Message.success('登录成功');
                             if (data.hotel) {
+                                localStorage.avatorImgPath = data.avatar;
                                 this.$router.push({
                                     name: 'home_index',
                                     params: data
