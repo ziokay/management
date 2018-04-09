@@ -121,9 +121,6 @@
             };
         },
         computed: {
-        //     passOrder() {
-        //         return this.data.finish == 1;
-        //     },
             form(){
                 return{
                     id: this.data.data.id,
@@ -133,8 +130,8 @@
         },
         methods: {
             passOrder() {
-                this.data.data.finish == 1;
-                return this.ajas('setOrder',this.from)
+                this.data.data.finish = 1;
+                return this.ajax('setOrder',this.form)
                     .then((data) => {
                         this.$Message.destroy();
                         this.$Message.success('审核成功');
