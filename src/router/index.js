@@ -31,10 +31,21 @@ router.beforeEach((to, from, next) => {
                 name: 'login'
             });
         } else if (Cookies.get('user') && to.name === 'login' && from.name !== 'signup') { // 判断是否已经登录且前往的是登录页
-            Util.title();
-            next({
-                name: 'home_index'
-            });
+            // https://github.com/iview/iview-admin/issues/454
+            // 登录之后，点击浏览器后退，LoadingBar一直加载。可以加个判断
+            if (from.name === 'home_index') {
+                router.go(-1);// 在登录页面再减一就跳到 / 了，如果  / 不是login页面的话
+                iView.LoadingBar.finish();
+            } else {
+                Util.title();
+                router.push({
+                    name: 'home_index'
+                });
+            }
+            // Util.title();
+            // next({
+            //     name: 'home_index'
+            // });
         } else {
             const curRouterObj = Util.getRouterObjByName([otherRouter, ...appRouter], to.name);
             if (curRouterObj && curRouterObj.access !== undefined) { // 需要判断权限的路由

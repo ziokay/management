@@ -1,6 +1,6 @@
 {
   "name": "management",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "a management bases on iview",
   "main": "index.js",
   "scripts": {

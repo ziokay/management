@@ -25,13 +25,13 @@
                             </Row>
                             <div class="line-gray"></div>
                             <Row class="margin-top-8">
+                                <Col span="8"><p class="notwrap">系统版本:</p></Col>
+                                <Col span="16" class="padding-left-8">{{ 'v ' + version }}</Col>
+                            </Row>
+                            <Row class="margin-top-8">
                                 <Col span="8"><p class="notwrap">登录日期:</p></Col>
                                 <Col span="16" class="padding-left-8">{{ today }}</Col>
                             </Row>
-                            <!-- <Row class="margin-top-8">
-                                <Col span="8"><p class="notwrap">上次登录地点:</p></Col>
-                                <Col span="16" class="padding-left-8">北京</Col>
-                            </Row> -->
                         </Card>
                     </Col>
                     <Col :md="12" :lg="24" :style="{marginBottom: '10px'}">
@@ -73,7 +73,7 @@
                             :end-val="count.createUser"
                             iconType="android-person-add"
                             color="#2d8cf0"
-                            intro-text="今日新增用户"
+                            intro-text="今日新增关注"
                         ></infor-card>
                     </Col>
                     <Col :xs="24" :sm="12" :md="6" :style="{marginBottom: '10px'}">
@@ -92,7 +92,7 @@
                             :end-val="count.collection"
                             iconType="upload"
                             color="#ffd572"
-                            intro-text="今日数据采集量"
+                            intro-text="今日流量"
                         ></infor-card>
                     </Col>
                     <Col :xs="24" :sm="12" :md="6" :style="{marginBottom: '10px'}">
@@ -101,28 +101,28 @@
                             :end-val="count.transfer"
                             iconType="shuffle"
                             color="#f25e43"
-                            intro-text="今日服务调用量"
+                            intro-text="今日服务人数"
                         ></infor-card>
                     </Col>
                 </Row>
-                <!-- <Row>
+                <Row>
                     <Card :padding="0">
                         <p slot="title" class="card-title">
                             <Icon type="map"></Icon>
-                            今日服务调用地理分布
+                            今日流量
                         </p>
                         <div class="map-con">
-                            <Col span="10">
-                                <map-data-table :cityData="cityData" height="281" :style-obj="{margin: '12px 0 0 11px'}"></map-data-table>
-                            </Col>
-                            <Col span="14" class="map-incon">
+                            <Col span="13" class="map-incon">
                                 <Row type="flex" justify="center" align="middle">
                                     <home-map :city-data="cityData"></home-map>
                                 </Row>
                             </Col>
+                            <Col span="10">
+                                <map-data-table :cityData="cityData" height="281" :style-obj="{margin: '12px 0 0 11px'}"></map-data-table>
+                            </Col>
                         </div>
                     </Card>
-                </Row> -->
+                </Row>
             </Col>
         </Row>
         <!-- <Row :gutter="10" class="margin-top-10">
@@ -187,6 +187,7 @@ import mapDataTable from './components/mapDataTable.vue';
 import toDoListItem from './components/toDoListItem.vue';
 
 import Cookies from 'js-cookie';
+import packageJson from '@/../package.json';
 
 export default {
     name: 'home_index',
@@ -208,38 +209,26 @@ export default {
         }
         return {
             toDoList: [
-                {
-                    title: '去iView官网学习完整的iView组件'
-                },
-                {
-                    title: '去iView官网学习完整的iView组件'
-                },
-                {
-                    title: '去iView官网学习完整的iView组件'
-                },
-                {
-                    title: '去iView官网学习完整的iView组件'
-                },
-                {
-                    title: '去iView官网学习完整的iView组件'
-                }
+                // {
+                //     title: ''
+                // }
             ],
             count: {
                 createUser: 496,
                 visit: 3264,
                 collection: 24389305,
-                transfer: 39503498
+                transfer: 12
             },
             cityData: cityData,
             showAddNewTodo: false,
             newToDoItemValue: '',
 
             userName: Cookies.get('user'),
-            today: FormatDate()
+            today: FormatDate(),
+            version: packageJson.version
         };
     },
     computed: {
-
         avatorPath () {
             return localStorage.avatorImgPath;
         }

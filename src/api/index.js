@@ -23,17 +23,17 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
     res => {
-        const data = res.data;
-        if (data.status === 401 && /token/g.test(data.message)) {
+        return res;
+    },
+    err => {
+        const res = err.response.data;
+        if (res && res.status === 401 && /token/g.test(res.message)) {
             const logoutError = {
                 logout: true,
                 message: 'token过期'
             };
             return Promise.reject(logoutError);
         }
-        return res;
-    },
-    err => {
         return Promise.reject(err);
     });
 

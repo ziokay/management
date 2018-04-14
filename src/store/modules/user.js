@@ -8,6 +8,7 @@ const user = {
             Cookies.remove('hotelID');
             Cookies.remove('menuID');
             Cookies.remove('access');
+            Cookies.remove('order_id');
             // 恢复默认样式
             let themeLink = document.querySelector('link[name="theme"]');
             themeLink.setAttribute('href', '');
