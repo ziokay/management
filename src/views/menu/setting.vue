@@ -441,6 +441,8 @@ export default {
                         this.$router.push({
                             name: 'login'
                         });
+                    } else if (err.response.status === 422 && err.response.statusText === "Unprocessable Entity") {
+                        this.$Message.error('菜单存储长度超出上限（1-200个字符）');
                     } else {
                         this.$Message.error('保存数据时发生错误');
                     }

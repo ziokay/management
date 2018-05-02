@@ -33,7 +33,7 @@
                     <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
                     <!-- <lock-screen></lock-screen> -->
                     <theme-switch></theme-switch>
-                    
+
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
@@ -46,7 +46,8 @@
                                     <DropdownItem name="loginout" divided>退出登录</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
-                            <Avatar :src="avatorPath" style="background: #619fe7;margin-left: 10px;"></Avatar>
+                                <Avatar v-if="avatorPath" :src="avatorPath" style="background: #619fe7;margin-left: 10px;"></Avatar>
+                                <Avatar v-else icon="person" style="background: #619fe7;margin-left: 10px;"></Avatar>
                         </Row>
                     </div>
                 </div>
@@ -102,7 +103,11 @@
                 return this.$store.state.app.currentPath; // 当前面包屑数组
             },
             avatorPath () {
-                return localStorage.avatorImgPath;
+                if (localStorage.avatorImgPath === 'null') {
+                    return;
+                } else {
+                    return localStorage.avatorImgPath;
+                }
             },
             cachePage () {
                 return this.$store.state.app.cachePage;

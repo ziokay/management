@@ -1,6 +1,4 @@
-# 商家管理平台
-
-> 当前版本：v1.3.1
+# 商家管理平台 v 1.0.1
 
 ## Install
 
@@ -31,6 +29,7 @@ npm run build
 - [Webpack](https://github.com/webpack/webpack)
 
 ## License
+
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2016-present, iView
+> 版本：v1.3.1

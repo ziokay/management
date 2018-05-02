@@ -1,6 +1,13 @@
 <style lang="less">
     @import "./home.less";
     @import "../../styles/common.less";
+
+    .avator-img.avatar-home {
+        background: #2d8cf0;
+        height: 100px;
+        line-height: 100px;
+        font-size: 50px;
+    }
 </style>
 <template>
     <div class="home-main">
@@ -12,7 +19,8 @@
                             <Row type="flex" class="user-infor">
                                 <Col span="8">
                                     <Row class-name="made-child-con-middle" type="flex" align="middle">
-                                        <img class="avator-img" :src="avatorPath" />
+                                        <img v-if="avatorPath" class="avator-img" :src="avatorPath" />
+                                        <Avatar v-else icon="android-person" shape="square" size="large" class="avator-img avatar-home"></Avatar>
                                     </Row>
                                 </Col>
                                 <Col span="16" style="padding-left:6px;">
@@ -125,52 +133,6 @@
                 </Row>
             </Col>
         </Row>
-        <!-- <Row :gutter="10" class="margin-top-10">
-            <Col :md="24" :lg="8" :style="{marginBottom: '10px'}">
-                <Card>
-                    <p slot="title" class="card-title">
-                        <Icon type="android-map"></Icon>
-                        上周每日来访量统计
-                    </p>
-                    <div class="data-source-row">
-                        <visite-volume></visite-volume>
-                    </div>
-                </Card>
-            </Col>
-            <Col :md="24" :lg="8" :style="{marginBottom: '10px'}">
-                <Card>
-                    <p slot="title" class="card-title">
-                        <Icon type="ios-pulse-strong"></Icon>
-                        数据来源统计
-                    </p>
-                    <div class="data-source-row">
-                        <data-source-pie></data-source-pie>
-                    </div>
-                </Card>
-            </Col>
-            <Col :md="24" :lg="8">
-                <Card>
-                    <p slot="title" class="card-title">
-                        <Icon type="android-wifi"></Icon>
-                        各类用户服务调用变化统计
-                    </p>
-                    <div class="data-source-row">
-                        <user-flow></user-flow>
-                    </div>
-                </Card>
-            </Col>
-        </Row>
-        <Row class="margin-top-10">
-            <Card>
-                <p slot="title" class="card-title">
-                    <Icon type="ios-shuffle-strong"></Icon>
-                    上周每日服务调用量(万)
-                </p>
-                <div class="line-chart-con">
-                    <service-requests></service-requests>
-                </div>
-            </Card>
-        </Row> -->
     </div>
 </template>
 
@@ -230,7 +192,11 @@ export default {
     },
     computed: {
         avatorPath () {
-            return localStorage.avatorImgPath;
+            if (localStorage.avatorImgPath === 'null') {
+                return;
+            } else {
+                return localStorage.avatorImgPath;
+            }
         }
     },
     methods: {
